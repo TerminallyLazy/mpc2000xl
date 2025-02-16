@@ -111,7 +111,7 @@ export const AIBeatGenerator: React.FC<AIBeatGeneratorProps> = ({
             <option value="house">House</option>
             <option value="techno">Techno</option>
             <option value="trap">Trap</option>
-            <option value="drum-n-bass">Drum & Bass</option>
+            <option value="drum-n-bass">Drum &amp; Bass</option>
           </select>
         </div>
 
