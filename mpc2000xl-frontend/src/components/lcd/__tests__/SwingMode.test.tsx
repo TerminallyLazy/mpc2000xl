@@ -26,7 +26,9 @@ describe('SwingMode', () => {
   it('updates percentage within valid range', () => {
     const onSettingsChange = jest.fn();
     const initialSettings = { ...defaultSettings, percentage: 50 };
-    render(
+    
+    // Create component with mock settings
+    const { rerender } = render(
       <SwingMode
         settings={initialSettings}
         onSettingsChange={onSettingsChange}
@@ -43,8 +45,14 @@ describe('SwingMode', () => {
       percentage: 65
     });
 
-    // Update settings to reflect last change
+    // Update component with new settings
     const settings65 = { ...initialSettings, percentage: 65 };
+    rerender(
+      <SwingMode
+        settings={settings65}
+        onSettingsChange={onSettingsChange}
+      />
+    );
 
     // Test upper limit
     fireEvent.change(slider, { target: { value: '75' } });
@@ -54,8 +62,14 @@ describe('SwingMode', () => {
       percentage: 75
     });
 
-    // Update settings to reflect last change
+    // Update component with new settings
     const settings75 = { ...settings65, percentage: 75 };
+    rerender(
+      <SwingMode
+        settings={settings75}
+        onSettingsChange={onSettingsChange}
+      />
+    );
 
     // Test lower limit
     fireEvent.change(slider, { target: { value: '50' } });
