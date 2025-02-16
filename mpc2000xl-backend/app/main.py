@@ -5,6 +5,7 @@ from typing import List, Dict, Optional
 import uuid
 from .models import Sample, DisplayState, Program, PadAssignment, SoundParameters
 from .routes import audio
+from .routes.ai import beat_generation
 
 app = FastAPI()
 
@@ -19,6 +20,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(audio.router, prefix="/audio", tags=["audio"])
+app.include_router(beat_generation.router, prefix="/ai", tags=["ai"])
 
 # In-memory storage
 samples: Dict[str, Sample] = {}
