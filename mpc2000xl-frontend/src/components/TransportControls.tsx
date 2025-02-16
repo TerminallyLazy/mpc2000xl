@@ -64,6 +64,10 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
     setIsDragging(false);
   };
 
+  const toggleMinimize = () => {
+    setIsMinimized(!isMinimized);
+  };
+
   return (
     <div 
       className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col gap-3 p-6 
@@ -78,15 +82,13 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex justify-end mb-2">
-        <button 
-          onClick={() => setIsMinimized(!isMinimized)}
-          className="text-sm text-primary hover:text-primary/80 transition-colors"
-          devinid="minimize-button"
-        >
-          {isMinimized ? 'Expand' : 'Minimize'}
-        </button>
-      </div>
+      <button 
+        onClick={toggleMinimize}
+        className="absolute top-2 right-2 text-sm text-primary hover:text-primary/80 transition-colors"
+        devinid="minimize-transport"
+      >
+        {isMinimized ? 'Expand' : 'Minimize'}
+      </button>
 
       {!isMinimized && (
         <>
