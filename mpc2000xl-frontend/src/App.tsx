@@ -146,153 +146,134 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-gray-100 p-8 rounded-lg shadow-2xl flex flex-col">
-        <div className="flex justify-between mb-8">
-          <div className="flex-1">
+      <div className="bg-gray-100 p-8 rounded-lg shadow-2xl flex">
+        {/* Left Section */}
+        <div className="flex-1 pr-8 border-r border-gray-300">
+          <LCD
+            mode={currentMode}
+            line1={displayState.line1}
+            line2={displayState.line2}
+            parameters={[
+              { label: 'Program', value: currentProgram?.name || 'None' },
+              { label: 'Bank', value: currentBank },
+              { label: 'Tempo', value: '120 BPM' },
+              { label: 'Volume', value: mainVolume + '%' }
+            ]}
+            statusIndicators={{
+              bank: currentBank,
+              tempo: 120
+            }}
+          />
+          <div className="mt-8">
             <ModeControls
               currentMode={currentMode}
               onModeChange={handleModeChange}
               shiftActive={shiftActive}
             />
           </div>
-          <div className="flex-1">
+          <div className="mt-8 flex justify-between items-end">
+            <div className="flex gap-4">
+              <LevelControl
+                type="main"
+                value={mainVolume}
+                onChange={setMainVolume}
+                label="MAIN"
+              />
+              <LevelControl
+                type="record"
+                value={recordLevel}
+                onChange={setRecordLevel}
+                label="REC"
+              />
+              <LevelControl
+                type="note"
+                value={noteVariation}
+                onChange={setNoteVariation}
+                label="NOTE VAR"
+              />
+            </div>
+            <DataWheel
+              value={0}
+              onChange={(value) => {
+                // TODO: Handle data wheel changes based on current mode
+                console.log('Data wheel value:', value);
+              }}
+            />
+          </div>
+        </div>
+        {/* Right Section */}
+        <div className="flex-1 pl-8">
+          <div className="mb-8">
             <PadBanks
               currentBank={currentBank}
               onBankChange={setCurrentBank}
             />
           </div>
-          <div className="flex gap-4">
-            <LevelControl
-              type="main"
-              value={mainVolume}
-              onChange={setMainVolume}
-              label="MAIN"
-            />
-            <LevelControl
-              type="record"
-              value={recordLevel}
-              onChange={setRecordLevel}
-              label="REC"
-            />
-            <LevelControl
-              type="note"
-              value={noteVariation}
-              onChange={setNoteVariation}
-              label="NOTE VAR"
+          <div className="mb-8">
+            {currentMode === 'MAIN' && (
+              <ProgramManager
+                currentProgram={currentProgram}
+                onProgramSelect={handleProgramChange}
+              />
+            )}
+            {currentMode === 'TRIM' && (
+              <TrimMode
+                currentSample={currentSample}
+                {...handleSampleEdit}
+              />
+            )}
+            {currentMode === 'LOAD' && (
+              <LoadMode
+                onSampleSelect={() => {}}
+                samples={[]}
+              />
+            )}
+            {currentMode === 'SAVE' && (
+              <SaveMode
+                onSave={() => {}}
+              />
+            )}
+            {currentMode === 'PROGRAM' && (
+              <ProgramMode
+                currentProgram={currentProgram}
+                currentBank={currentBank}
+                onBankChange={setCurrentBank}
+                onPadAssign={(bank, pad, assignment) => {
+                  if (!currentProgram) return;
+                  const updatedProgram = { ...currentProgram };
+                  if (!updatedProgram.pad_assignments[bank]) {
+                    updatedProgram.pad_assignments[bank] = {};
+                  }
+                  updatedProgram.pad_assignments[bank][pad] = assignment;
+                  setCurrentProgram(updatedProgram);
+                }}
+              />
+            )}
+          </div>
+          <div className="mb-6">
+            <input
+              type="file"
+              accept=".wav,.mp3"
+              onChange={handleFileUpload}
+              className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100"
             />
           </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex gap-4">
-            <LevelControl
-              type="main"
-              value={mainVolume}
-              onChange={setMainVolume}
-              label="MAIN"
-            />
-            <LevelControl
-              type="record"
-              value={recordLevel}
-              onChange={setRecordLevel}
-              label="REC"
-            />
-            <LevelControl
-              type="note"
-              value={noteVariation}
-              onChange={setNoteVariation}
-              label="NOTE VAR"
-            />
+          <div className="grid grid-cols-4 gap-4">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <Pad
+                key={i}
+                index={i}
+                onClick={() => handlePadClick(i)}
+                isPressed={pressedPad === i}
+                assignment={currentProgram?.pad_assignments[currentBank]?.[i]}
+              />
+            ))}
           </div>
-          <DataWheel
-            value={0}
-            onChange={(value) => {
-              // TODO: Handle data wheel changes based on current mode
-              console.log('Data wheel value:', value);
-            }}
-          />
-        </div>
-      </div>
-      <LCD
-        mode={currentMode}
-        line1={displayState.line1}
-        line2={displayState.line2}
-        parameters={[
-          { label: 'Program', value: currentProgram?.name || 'None' },
-          { label: 'Bank', value: currentBank },
-          { label: 'Tempo', value: '120 BPM' },
-          { label: 'Volume', value: '100%' }
-        ]}
-        statusIndicators={{
-          bank: currentBank,
-          tempo: 120
-        }}
-      />
-      <div className="mb-8">
-          {currentMode === 'MAIN' && (
-            <ProgramManager
-              currentProgram={currentProgram}
-              onProgramSelect={handleProgramChange}
-            />
-          )}
-          {currentMode === 'TRIM' && (
-            <TrimMode
-              currentSample={currentSample}
-              {...handleSampleEdit}
-            />
-          )}
-          {currentMode === 'LOAD' && (
-            <LoadMode
-              onSampleSelect={() => {}}
-              samples={[]}
-            />
-          )}
-          {currentMode === 'SAVE' && (
-            <SaveMode
-              onSave={() => {}}
-            />
-          )}
-          {currentMode === 'PROGRAM' && (
-            <ProgramMode
-              currentProgram={currentProgram}
-              currentBank={currentBank}
-              onBankChange={setCurrentBank}
-              onPadAssign={(bank, pad, assignment) => {
-                if (!currentProgram) return;
-                const updatedProgram = { ...currentProgram };
-                if (!updatedProgram.pad_assignments[bank]) {
-                  updatedProgram.pad_assignments[bank] = {};
-                }
-                updatedProgram.pad_assignments[bank][pad] = assignment;
-                setCurrentProgram(updatedProgram);
-              }}
-            />
-          )}
-        </div>
-        
-        <div className="mb-6">
-          <input
-            type="file"
-            accept=".wav,.mp3"
-            onChange={handleFileUpload}
-            className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700
-              hover:file:bg-blue-100"
-          />
-        </div>
-        
-        <div className="grid grid-cols-4 gap-4">
-          {Array.from({ length: 16 }).map((_, i) => (
-            <Pad
-              key={i}
-              index={i}
-              onClick={() => handlePadClick(i)}
-              isPressed={pressedPad === i}
-              assignment={currentProgram?.pad_assignments[currentBank]?.[i]}
-            />
-          ))}
         </div>
       </div>
     </div>
