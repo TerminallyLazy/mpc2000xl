@@ -11,6 +11,7 @@ import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
 import { PadBanks } from './components/PadBanks';
+import { LevelControl } from './components/LevelControl';
 
 function App() {
   // Mode transition handlers
@@ -41,6 +42,9 @@ function App() {
   const [currentProgram, setCurrentProgram] = useState<Program | null>(null);
   const [currentSample, setCurrentSample] = useState<Sample | null>(null);
   const [currentBank, setCurrentBank] = useState<'A' | 'B' | 'C' | 'D'>('A');
+  const [mainVolume, setMainVolume] = useState(100);
+  const [recordLevel, setRecordLevel] = useState(75);
+  const [noteVariation, setNoteVariation] = useState(50);
 
   const handlePadClick = async (index: number) => {
     setPressedPad(index);
@@ -155,6 +159,26 @@ function App() {
             <PadBanks
               currentBank={currentBank}
               onBankChange={setCurrentBank}
+            />
+          </div>
+          <div className="flex gap-4">
+            <LevelControl
+              type="main"
+              value={mainVolume}
+              onChange={setMainVolume}
+              label="MAIN"
+            />
+            <LevelControl
+              type="record"
+              value={recordLevel}
+              onChange={setRecordLevel}
+              label="REC"
+            />
+            <LevelControl
+              type="note"
+              value={noteVariation}
+              onChange={setNoteVariation}
+              label="NOTE VAR"
             />
           </div>
         </div>
