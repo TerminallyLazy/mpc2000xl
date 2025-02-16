@@ -47,14 +47,16 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
       <div className="mb-4">
         <div>Pattern: {currentPattern.name}</div>
         <div>
-          Length: 
+          <label htmlFor="pattern-length">Length:</label>
           <input
+            id="pattern-length"
             type="number"
             min={1}
             max={64}
             value={currentPattern.length}
             onChange={e => handlePatternUpdate({ length: Number(e.target.value) })}
             className="bg-gray-700 text-green-400 p-1 ml-2 w-16"
+            aria-label="Pattern length in steps"
           />
           steps
         </div>

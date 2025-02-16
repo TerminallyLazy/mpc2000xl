@@ -41,7 +41,7 @@ describe('StepEditMode', () => {
     expect(screen.getByText(`Pattern: ${mockPattern.name}`)).toBeInTheDocument();
     
     // Check length input exists with correct value
-    const lengthInput = screen.getByRole('spinbutton', { name: /length/i });
+    const lengthInput = screen.getByLabelText('Pattern length in steps');
     expect(lengthInput).toHaveValue(mockPattern.length);
   });
 
