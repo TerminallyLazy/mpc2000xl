@@ -1,4 +1,4 @@
-import { SoundBankManager, SoundBank } from '../soundBank';
+import { soundBankManager, SoundBank, SoundBankManager } from '../soundBank';
 import { Sample } from '../../types';
 
 // Mock AudioContext and fetch
@@ -10,15 +10,14 @@ global.AudioContext = jest.fn().mockImplementation(() => mockAudioContext);
 global.fetch = jest.fn();
 
 describe('SoundBankManager', () => {
-  let manager: SoundBankManager;
-
   beforeEach(() => {
-    manager = new SoundBankManager();
+    // Reset the singleton instance for each test
+    Object.assign(soundBankManager, new SoundBankManager());
     jest.clearAllMocks();
   });
 
   it('should initialize with default banks', () => {
-    const banks = manager.getAvailableBanks();
+    const banks = soundBankManager.getAvailableBanks();
     expect(banks).toHaveLength(3);
     expect(banks.map(b => b.name)).toContain('TR-808');
     expect(banks.map(b => b.name)).toContain('TR-909');
@@ -35,8 +34,8 @@ describe('SoundBankManager', () => {
 
     mockAudioContext.decodeAudioData.mockResolvedValue(mockAudioBuffer);
 
-    await manager.loadBank('tr-808', { maxMemoryMB: 2 });
-    expect(manager.getCurrentMemoryUsage()).toBeLessThanOrEqual(2 * 1024 * 1024);
+    await soundBankManager.loadBank('tr-808', { maxMemoryMB: 2 });
+    expect(soundBankManager.getCurrentMemoryUsage()).toBeLessThanOrEqual(2 * 1024 * 1024);
   });
 
   it('should throw error when exceeding memory limit', async () => {
@@ -46,7 +45,7 @@ describe('SoundBankManager', () => {
       arrayBuffer: () => Promise.resolve(mockArrayBuffer)
     });
 
-    await expect(manager.loadBank('tr-808', { maxMemoryMB: 16 }))
+    await expect(soundBankManager.loadBank('tr-808', { maxMemoryMB: 16 }))
       .rejects
       .toThrow('Memory limit of 16MB exceeded');
   });
@@ -62,7 +61,7 @@ describe('SoundBankManager', () => {
 
     mockAudioContext.decodeAudioData.mockResolvedValue(mockAudioBuffer);
 
-    await manager.loadBank('tr-808', { onProgress });
+    await soundBankManager.loadBank('tr-808', { onProgress });
     expect(onProgress).toHaveBeenCalled();
   });
 
@@ -76,11 +75,11 @@ describe('SoundBankManager', () => {
 
     mockAudioContext.decodeAudioData.mockResolvedValue(mockAudioBuffer);
 
-    await manager.loadBank('tr-808');
-    const initialMemory = manager.getCurrentMemoryUsage();
+    await soundBankManager.loadBank('tr-808');
+    const initialMemory = soundBankManager.getCurrentMemoryUsage();
     
-    manager.unloadBank('tr-808');
-    expect(manager.getCurrentMemoryUsage()).toBeLessThan(initialMemory);
+    soundBankManager.unloadBank('tr-808');
+    expect(soundBankManager.getCurrentMemoryUsage()).toBeLessThan(initialMemory);
   });
 
   it('should retrieve loaded samples', async () => {
@@ -93,8 +92,8 @@ describe('SoundBankManager', () => {
 
     mockAudioContext.decodeAudioData.mockResolvedValue(mockAudioBuffer);
 
-    await manager.loadBank('tr-808');
-    const samples = manager.getLoadedSamples();
+    await soundBankManager.loadBank('tr-808');
+    const samples = soundBankManager.getLoadedSamples();
     expect(samples.length).toBeGreaterThan(0);
     expect(samples[0]).toHaveProperty('id');
     expect(samples[0]).toHaveProperty('name');

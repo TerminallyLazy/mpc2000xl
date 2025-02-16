@@ -19,7 +19,7 @@ export interface SoundBankLoadOptions {
   maxMemoryMB?: number; // Default: 16MB
 }
 
-class SoundBankManager {
+export class SoundBankManager {
   private banks: Map<string, SoundBank> = new Map();
   private loadedSamples: Map<string, Sample> = new Map();
   private readonly MAX_MEMORY_MB = 16;
