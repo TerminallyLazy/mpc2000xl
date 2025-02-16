@@ -92,10 +92,17 @@ describe('Step Editor Integration', () => {
 
   it('manages patterns and sequences correctly', async () => {
     render(
-      <PatternManager
-        currentSequence={mockSequence}
-        onSequenceChange={mockOnSequenceChange}
-      />
+      <>
+        <StepEditMode
+          currentPattern={mockPattern}
+          onEventChange={mockOnEventChange}
+          onPatternChange={mockOnPatternChange}
+        />
+        <PatternManager
+          currentSequence={mockSequence}
+          onSequenceChange={mockOnSequenceChange}
+        />
+      </>
     );
 
     // Add new pattern
@@ -114,23 +121,13 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Add new pattern to show resolution controls
-    fireEvent.click(screen.getByText('Add Pattern'));
-
-    // Wait for resolution controls to appear
-    await new Promise(resolve => setTimeout(resolve, 0));
-
     // Change resolution using the select element
-    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: false });
+    const resolutionSelect = screen.getByLabelText('Resolution:', { exact: false });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
-    expect(mockOnSequenceChange).toHaveBeenCalledWith(
+    expect(mockOnPatternChange).toHaveBeenCalledWith(
       expect.objectContaining({
-        patterns: expect.arrayContaining([
-          expect.objectContaining({
-            resolution: 16
-          })
-        ])
+        resolution: 16
       })
     );
   });
