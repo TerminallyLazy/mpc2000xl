@@ -7,7 +7,7 @@ export class SoundBankLoader {
   private loadedBanks: Map<string, SoundBank> = new Map();
   private currentMemoryUsage = 0;
 
-  async loadBank(bankId: string, onProgress?: (loaded: number, total: number) => void): Promise<void> {
+  async loadBank(bankId: string, options?: { onProgress?: (loaded: number, total: number) => void }): Promise<void> {
     const bank = await this.fetchBankMetadata(bankId);
     if (!bank) throw new Error(`Bank ${bankId} not found`);
 
@@ -43,7 +43,7 @@ export class SoundBankLoader {
         this.currentMemoryUsage += arrayBuffer.byteLength;
 
         loadedCount++;
-        onProgress?.(loadedCount, sampleEntries.length);
+        options?.onProgress?.(loadedCount, sampleEntries.length);
       } catch (error) {
         console.error(`Failed to load sample ${sampleId} from bank ${bankId}:`, error);
         throw error;
@@ -56,7 +56,7 @@ export class SoundBankLoader {
   private async fetchBankMetadata(bankId: string): Promise<SoundBank | null> {
     try {
       // Use default banks instead of API call
-      const { defaultBanks } = await import('./defaultBanks');
+      const defaultBanks = (await import('./defaultBanks')).defaultBanks;
       return defaultBanks[bankId] || null;
     } catch (error) {
       console.error('Error fetching bank metadata:', error);
