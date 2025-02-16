@@ -37,21 +37,21 @@ describe('SwingMode', () => {
     
     // Test valid range (should round to nearest 5)
     fireEvent.change(slider, { target: { value: '63' } });
-    expect(onSettingsChange).toHaveBeenCalledWith({
+    expect(onSettingsChange).nthCalledWith(1, {
       ...initialSettings,
       percentage: 65
     });
 
     // Test upper limit
     fireEvent.change(slider, { target: { value: '80' } });
-    expect(onSettingsChange).toHaveBeenCalledWith({
+    expect(onSettingsChange).nthCalledWith(2, {
       ...initialSettings,
       percentage: 75
     });
 
     // Test lower limit
     fireEvent.change(slider, { target: { value: '45' } });
-    expect(onSettingsChange).toHaveBeenCalledWith({
+    expect(onSettingsChange).nthCalledWith(3, {
       ...initialSettings,
       percentage: 50
     });
