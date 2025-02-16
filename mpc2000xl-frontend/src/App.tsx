@@ -214,9 +214,7 @@ function App() {
           <QuickHelp />
         </div>
         
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 
-          bg-control-bg/90 backdrop-blur-sm p-4 rounded-lg shadow-xl border border-primary/20">
-          <TransportControls
+        <TransportControls
             onPlay={() => {
               setIsPlaying(true);
               audioEngine.startTransport();

@@ -19,10 +19,10 @@ const TransportButton: React.FC<{
 }> = ({ onClick, active, children, devinid }) => (
   <button
     onClick={onClick}
-    className={`w-20 h-20 rounded-full backdrop-blur-md ${
+    className={`w-16 h-16 rounded-full backdrop-blur-md ${
       active ? 'bg-primary/90 shadow-inner' : 'bg-control-bg/80'
     } text-control-text font-bold hover:bg-primary/70 transition-all 
-    shadow-lg border border-primary/40`}
+    shadow-lg border border-primary/40 text-sm`}
     aria-label={children?.toString()}
     devinid={devinid}
   >
@@ -70,12 +70,12 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
 
   return (
     <div 
-      className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col gap-3 p-6 
+      className={`fixed bottom-8 right-8 flex flex-col gap-3 p-4 
         backdrop-blur-md bg-control-bg/95 rounded-xl shadow-2xl border-2 border-primary/40 
         animate-fade-in z-[9999] cursor-move transition-all duration-300
         ${isDragging ? 'opacity-50' : ''}`}
       style={{
-        transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`,
+        transform: `translate(${position.x}px, ${position.y}px)`,
       }}
       draggable={true}
       onDragStart={handleDragStart}
