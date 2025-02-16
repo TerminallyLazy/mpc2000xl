@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pattern, Sequence } from '../types';
+import { generateId } from '../utils/id';
 
 interface PatternManagerProps {
   currentSequence: Sequence;
@@ -31,7 +32,7 @@ export const PatternManager: React.FC<PatternManagerProps> = ({
 
   const handleAddPattern = () => {
     const newPattern: Pattern = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       name: `Pattern ${currentSequence.patterns.length + 1}`,
       events: [],
       length: 16,
@@ -118,8 +119,9 @@ export const PatternManager: React.FC<PatternManagerProps> = ({
       {currentPattern && (
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block mb-1">Length (steps)</label>
+            <label htmlFor="pattern-length" className="block mb-1">Length (steps)</label>
             <input
+              id="pattern-length"
               type="number"
               min={1}
               max={64}
