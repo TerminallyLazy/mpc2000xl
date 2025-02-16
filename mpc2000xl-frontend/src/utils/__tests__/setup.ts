@@ -1,60 +1,97 @@
 export {};
 
-// Define AudioBuffer constructor function
-function AudioBuffer(this: any, numberOfChannels = 1, length = 44100, sampleRate = 44100) {
+// Define interfaces
+interface IAudioBuffer {
+  numberOfChannels: number;
+  length: number;
+  sampleRate: number;
+  duration: number;
+  channels: Float32Array[];
+  getChannelData(channel: number): Float32Array;
+  copyToChannel(source: Float32Array, channelNumber: number, startInChannel?: number): void;
+  copyFromChannel(destination: Float32Array, channelNumber: number, startInChannel?: number): void;
+}
+
+interface IAudioContext {
+  createBuffer(numberOfChannels: number, length: number, sampleRate: number): IAudioBuffer;
+  decodeAudioData(buffer: ArrayBuffer): Promise<IAudioBuffer>;
+  close(): Promise<void>;
+}
+
+// Define constructor function types
+interface AudioBufferConstructor {
+  new (numberOfChannels?: number, length?: number, sampleRate?: number): IAudioBuffer;
+  (numberOfChannels?: number, length?: number, sampleRate?: number): IAudioBuffer;
+}
+
+interface AudioContextConstructor {
+  new (): IAudioContext;
+  (): IAudioContext;
+}
+
+// Implement AudioBuffer
+const AudioBuffer = function(this: IAudioBuffer | void, numberOfChannels = 1, length = 44100, sampleRate = 44100): IAudioBuffer {
   if (!(this instanceof AudioBuffer)) {
     return new (AudioBuffer as any)(numberOfChannels, length, sampleRate);
   }
 
-  this.numberOfChannels = numberOfChannels;
-  this.length = length;
-  this.sampleRate = sampleRate;
-  this.duration = this.length / this.sampleRate;
-  this.channels = Array.from({ length: this.numberOfChannels }, () => new Float32Array(this.length));
+  const instance = this as IAudioBuffer;
+  instance.numberOfChannels = numberOfChannels;
+  instance.length = length;
+  instance.sampleRate = sampleRate;
+  instance.duration = length / sampleRate;
+  instance.channels = Array.from({ length: numberOfChannels }, () => new Float32Array(length));
 
-  this.getChannelData = function(channel: number): Float32Array {
+  instance.getChannelData = function(channel: number): Float32Array {
     if (channel < 0 || channel >= this.numberOfChannels) {
       throw new Error('Invalid channel index');
     }
     return this.channels[channel];
   };
 
-  this.copyToChannel = function(source: Float32Array, channelNumber: number, startInChannel = 0): void {
+  instance.copyToChannel = function(source: Float32Array, channelNumber: number, startInChannel = 0): void {
     if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
       throw new Error('Invalid channel index');
     }
     const channel = this.channels[channelNumber];
-    const length = Math.min(source.length, channel.length - startInChannel);
-    channel.set(source.subarray(0, length), startInChannel);
+    const copyLength = Math.min(source.length, channel.length - startInChannel);
+    channel.set(source.subarray(0, copyLength), startInChannel);
   };
 
-  this.copyFromChannel = function(destination: Float32Array, channelNumber: number, startInChannel = 0): void {
+  instance.copyFromChannel = function(destination: Float32Array, channelNumber: number, startInChannel = 0): void {
     if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
       throw new Error('Invalid channel index');
     }
     const channel = this.channels[channelNumber];
-    const length = Math.min(destination.length, channel.length - startInChannel);
-    destination.set(channel.subarray(startInChannel, startInChannel + length));
+    const copyLength = Math.min(destination.length, channel.length - startInChannel);
+    destination.set(channel.subarray(startInChannel, startInChannel + copyLength));
   };
-}
 
-function MockAudioContext(this: any) {
+  return instance;
+} as unknown as AudioBufferConstructor;
+
+// Implement AudioContext
+const MockAudioContext = function(this: IAudioContext | void): IAudioContext {
   if (!(this instanceof MockAudioContext)) {
     return new (MockAudioContext as any)();
   }
 
-  this.createBuffer = function(numberOfChannels: number, length: number, sampleRate: number) {
+  const instance = this as IAudioContext;
+
+  instance.createBuffer = function(numberOfChannels: number, length: number, sampleRate: number): IAudioBuffer {
     return new AudioBuffer(numberOfChannels, length, sampleRate);
   };
 
-  this.decodeAudioData = function(_buffer: ArrayBuffer) {
+  instance.decodeAudioData = function(_buffer: ArrayBuffer): Promise<IAudioBuffer> {
     return Promise.resolve(new AudioBuffer());
   };
 
-  this.close = function() {
+  instance.close = function(): Promise<void> {
     return Promise.resolve();
   };
-}
+
+  return instance;
+} as unknown as AudioContextConstructor;
 
 // Make it a module with side effects
 (global as any).AudioBuffer = AudioBuffer;
