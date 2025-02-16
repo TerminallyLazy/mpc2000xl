@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Sample } from '../types';
+
+const ZOOM_LEVELS = [1, 2, 4, 8, 16];
 
 interface SampleEditorProps {
   sample: Sample;
@@ -18,6 +20,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = ({
   onTuneChange,
   onVolumeChange
 }) => {
+  const [zoomLevel, setZoomLevel] = useState(0); // Index into ZOOM_LEVELS
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -106,12 +109,38 @@ export const SampleEditor: React.FC<SampleEditorProps> = ({
 
   return (
     <div className="bg-gray-800 p-4 rounded-lg">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-32 mb-4"
-        width={800}
-        height={128}
-      />
+      <div className="flex items-center gap-4 mb-4">
+        <button
+          onClick={() => setZoomLevel(Math.min(zoomLevel + 1, ZOOM_LEVELS.length - 1))}
+          className="px-3 py-1 bg-primary/20 hover:bg-primary/30 rounded text-green-400"
+          data-testid="zoom-in"
+        >
+          Zoom In
+        </button>
+        <button
+          onClick={() => setZoomLevel(Math.max(zoomLevel - 1, 0))}
+          className="px-3 py-1 bg-primary/20 hover:bg-primary/30 rounded text-green-400"
+          data-testid="zoom-out"
+        >
+          Zoom Out
+        </button>
+        <span className="text-sm text-green-400">Zoom: {ZOOM_LEVELS[zoomLevel]}x</span>
+      </div>
+      
+      <div className="overflow-x-auto">
+        <div style={{
+          width: `${100 * ZOOM_LEVELS[zoomLevel]}%`,
+          minWidth: '100%',
+          transform: `translateX(${-50 * (ZOOM_LEVELS[zoomLevel] - 1)}%)`
+        }}>
+          <canvas
+            ref={canvasRef}
+            className="w-full h-32 mb-4"
+            width={800 * ZOOM_LEVELS[zoomLevel]}
+            height={128}
+          />
+        </div>
+      </div>
       
       <div className="grid grid-cols-2 gap-4">
         <div>
