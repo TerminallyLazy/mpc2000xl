@@ -24,10 +24,9 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onPlay}
-          className={`w-20 h-20 rounded-full backdrop-blur-md ${
-            isPlaying ? 'bg-primary/90 shadow-inner' : 'bg-control-bg/80'
-          } text-control-text font-bold hover:bg-primary/70 transition-all 
-          shadow-lg border border-primary/40`}
+          className={`w-16 h-16 rounded-full ${
+            isPlaying ? 'bg-primary/90' : 'bg-control-bg/80'
+          } text-control-text text-sm font-bold hover:bg-primary/70 transition-all`}
           aria-label="Play"
           devinid="play-button"
         >
@@ -35,9 +34,8 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
         </button>
         <button
           onClick={onStop}
-          className="w-20 h-20 rounded-full backdrop-blur-md bg-control-bg/80 
-            text-control-text font-bold hover:bg-primary/50 transition-all 
-            shadow-lg border border-primary/40"
+          className="w-16 h-16 rounded-full bg-control-bg/80 
+            text-control-text text-sm font-bold hover:bg-primary/50 transition-all"
           aria-label="Stop"
           devinid="stop-button"
         >
@@ -47,10 +45,9 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onRecord}
-          className={`w-20 h-20 rounded-full backdrop-blur-md ${
-            isRecording ? 'bg-primary/90 shadow-inner' : 'bg-control-bg/80'
-          } text-control-text font-bold hover:bg-primary/70 transition-all 
-          shadow-lg border border-primary/40`}
+          className={`w-16 h-16 rounded-full ${
+            isRecording ? 'bg-primary/90' : 'bg-control-bg/80'
+          } text-control-text text-sm font-bold hover:bg-primary/70 transition-all`}
           aria-label="Record"
           devinid="record-button"
         >
@@ -58,9 +55,8 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
         </button>
         <button
           onClick={onDub}
-          className="w-20 h-20 rounded-full backdrop-blur-md bg-control-bg/80 
-            text-control-text font-bold hover:bg-primary/50 transition-all 
-            shadow-lg border border-primary/40"
+          className="w-16 h-16 rounded-full bg-control-bg/80 
+            text-control-text text-sm font-bold hover:bg-primary/50 transition-all"
           aria-label="Overdub"
           devinid="dub-button"
         >
