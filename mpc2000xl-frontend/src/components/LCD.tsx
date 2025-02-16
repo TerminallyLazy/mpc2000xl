@@ -47,10 +47,6 @@ export const LCD: React.FC<LCDProps> = ({
   selectedItem = 0,
   onMenuSelect,
   activeParameter
-  statusIndicators = {},
-  menuItems = [],
-  selectedItem = 0,
-  onMenuSelect
 }) => {
   const showMenu = menuItems.length > 0 && mode !== 'MAIN';
 

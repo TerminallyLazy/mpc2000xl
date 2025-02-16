@@ -35,10 +35,16 @@ function App() {
           { id: 'tune', label: 'Tune', value: currentSample?.tune || 0, min: -12, max: 12, step: 1 }
         ];
       case 'PROGRAM':
+        const currentPad = pressedPad !== null ? currentProgram?.pad_assignments[currentBank]?.[pressedPad] : undefined;
         return [
-          { id: 'velocity', label: 'Velocity', value: 100, min: 0, max: 127, step: 1 },
-          { id: 'tune', label: 'Tune', value: 0, min: -12, max: 12, step: 1 },
-          { id: 'level', label: 'Level', value: 100, min: 0, max: 100, step: 1 }
+          { id: 'velocity', label: 'Velocity', value: currentPad?.velocity || 100, min: 0, max: 127, step: 1 },
+          { id: 'tune', label: 'Tune', value: currentPad?.tune || 0, min: -12, max: 12, step: 1 },
+          { id: 'level', label: 'Level', value: currentPad?.volume || 100, min: 0, max: 100, step: 1 }
+        ];
+      case 'MAIN':
+        return [
+          { id: 'tempo', label: 'Tempo', value: 120, min: 30, max: 300, step: 0.1 },
+          { id: 'volume', label: 'Volume', value: mainVolume, min: 0, max: 100, step: 1 }
         ];
       default:
         return [];
