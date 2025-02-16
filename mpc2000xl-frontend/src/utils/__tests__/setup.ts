@@ -27,6 +27,11 @@ class MockAudioContext {
   decodeAudioData(_buffer: ArrayBuffer) {
     return Promise.resolve(new MockAudioBuffer());
   }
+
+  close() {
+    // Mock implementation
+    return Promise.resolve();
+  }
 }
 
 // Make it a module with side effects

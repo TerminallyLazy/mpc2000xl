@@ -459,11 +459,16 @@ export class TimeStretchProcessor {
       throw new Error('Time stretch ratio must be between 50% and 200%');
     }
 
-    if (options.algorithmIndex < 0 || options.algorithmIndex >= this.algorithms.length) {
-      throw new Error('Invalid algorithm index');
+    // Find algorithm matching requested quality
+    const matchingAlgorithms = this.algorithms.filter(a => a.quality === options.quality);
+    
+    // Use specified algorithm index within matching quality group, or first matching algorithm
+    const algorithm = matchingAlgorithms[options.algorithmIndex] || matchingAlgorithms[0];
+    
+    if (!algorithm) {
+      throw new Error(`No algorithm found for quality ${options.quality}`);
     }
-
-    const algorithm = this.algorithms.find(a => a.quality === options.quality) || this.algorithms[0];
+    
     return algorithm.process(buffer, options.ratio);
   }
 
