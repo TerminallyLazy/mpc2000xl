@@ -143,13 +143,20 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
       <div className="bg-gray-100 p-8 rounded-lg shadow-2xl flex flex-col">
-        <div className="flex justify-between items-start mb-8">
+        <div className="flex justify-between mb-8">
           <div className="flex-1">
-        <ModeControls
-          currentMode={currentMode}
-          onModeChange={handleModeChange}
-          shiftActive={shiftActive}
-        />
+            <ModeControls
+              currentMode={currentMode}
+              onModeChange={handleModeChange}
+              shiftActive={shiftActive}
+            />
+          </div>
+          <div className="flex-1">
+            <PadBanks
+              currentBank={currentBank}
+              onBankChange={setCurrentBank}
+            />
+          </div>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <DataWheel
@@ -232,10 +239,6 @@ function App() {
           />
         </div>
         
-        <PadBanks
-          currentBank={currentBank}
-          onBankChange={setCurrentBank}
-        />
         <div className="grid grid-cols-4 gap-4">
           {Array.from({ length: 16 }).map((_, i) => (
             <Pad
