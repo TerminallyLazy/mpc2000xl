@@ -62,6 +62,16 @@ class AudioEngine {
     }
   }
 
+  getSample(id: string) {
+    const player = this.players.get(id);
+    if (!player) return null;
+    return {
+      sampleRate: player.context.sampleRate,
+      numberOfChannels: 1, // Tone.js players are mono by default
+      duration: player.buffer.duration
+    };
+  }
+
   disposeAll() {
     for (const [_, player] of this.players) {
       player.dispose();
