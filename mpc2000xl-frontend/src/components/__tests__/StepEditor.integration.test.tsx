@@ -114,8 +114,11 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Debug the rendered output
-    screen.debug();
+    // Add new pattern to show resolution controls
+    fireEvent.click(screen.getByText('Add Pattern'));
+
+    // Wait for resolution controls to appear
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Change resolution using the select element
     const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: false });
