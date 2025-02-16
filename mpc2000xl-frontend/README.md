@@ -1,50 +1,101 @@
-# React + TypeScript + Vite
+# MPC2000XL Frontend Emulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based emulator for the legendary Akai MPC2000XL drum machine and sampler, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Core Functionality
+- **Sample Management**: Load, edit, and organize WAV and MP3 samples
+- **Pad Banks**: 4 banks (A-B-C-D) with 16 pads each
+- **LCD Display**: Authentic recreation of the MPC2000XL display
+- **Mode Controls**: Main, Program, Trim, Step Edit, and more
+- **Real-time Parameter Control**: Data wheel for precise adjustments
 
-## Expanding the ESLint configuration
+### Advanced Features
+- **Time-Stretching System**:
+  - 3 quality presets (Standard, Better, Highest)
+  - 18 algorithms including WSOLA and Phase Vocoder
+  - Ratio range: 50% to 200%
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Swing Pattern System**:
+  - Percentage range: 50% to 75%
+  - Multiple resolution settings (1/4, 1/8, 1/16, 1/32)
+  - Global and per-sequence settings
 
-- Configure the top-level `parserOptions` property like this:
+- **Sound Bank System**:
+  - Classic TR-808 and TR-909 samples
+  - Original MPC2000XL factory sounds
+  - Custom sample import support
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Prerequisites
+- Node.js 16.x or higher
+- npm or yarn package manager
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/TerminallyLazy/mpc2000xl.git
+
+# Navigate to frontend directory
+cd mpc2000xl/mpc2000xl-frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Building for Production
+```bash
+# Create optimized production build
+npm run build
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+# Preview production build
+npm run preview
 ```
+
+## Development
+
+### Project Structure
+```
+src/
+├── components/     # React components
+├── contexts/      # React contexts
+├── hooks/         # Custom hooks
+├── utils/         # Utility functions
+└── types.ts       # TypeScript definitions
+```
+
+### Key Components
+- `App.tsx`: Main application component
+- `LCD.tsx`: LCD display emulation
+- `ModeControls.tsx`: Mode selection buttons
+- `Pad.tsx`: Individual pad component
+- `DataWheel.tsx`: Parameter adjustment control
+
+### Testing
+```bash
+# Run unit tests
+npm test
+
+# Run tests in watch mode
+npm test:watch
+
+# Generate coverage report
+npm test:coverage
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
