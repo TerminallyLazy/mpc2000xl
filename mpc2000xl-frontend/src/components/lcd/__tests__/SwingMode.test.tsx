@@ -43,19 +43,25 @@ describe('SwingMode', () => {
       percentage: 65
     });
 
+    // Update settings to reflect last change
+    const settings65 = { ...initialSettings, percentage: 65 };
+
     // Test upper limit
     fireEvent.change(slider, { target: { value: '75' } });
     expect(onSettingsChange).toHaveBeenCalledTimes(2);
     expect(onSettingsChange).toHaveBeenLastCalledWith({
-      ...initialSettings,
+      ...settings65,
       percentage: 75
     });
+
+    // Update settings to reflect last change
+    const settings75 = { ...settings65, percentage: 75 };
 
     // Test lower limit
     fireEvent.change(slider, { target: { value: '50' } });
     expect(onSettingsChange).toHaveBeenCalledTimes(3);
     expect(onSettingsChange).toHaveBeenLastCalledWith({
-      ...initialSettings,
+      ...settings75,
       percentage: 50
     });
   });
