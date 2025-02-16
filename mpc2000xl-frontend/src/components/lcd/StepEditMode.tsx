@@ -64,8 +64,9 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
       {selectedEvent && (
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block mb-1">Note</label>
+            <label htmlFor="note-input" className="block mb-1">Note</label>
             <input
+              id="note-input"
               type="number"
               min={0}
               max={127}
@@ -75,8 +76,9 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
             />
           </div>
           <div>
-            <label className="block mb-1">Velocity</label>
+            <label htmlFor="velocity-input" className="block mb-1">Velocity</label>
             <input
+              id="velocity-input"
               type="number"
               min={0}
               max={127}
@@ -86,8 +88,9 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
             />
           </div>
           <div>
-            <label className="block mb-1">Duration</label>
+            <label htmlFor="duration-input" className="block mb-1">Duration</label>
             <input
+              id="duration-input"
               type="number"
               min={1}
               max={currentPattern.length}
@@ -97,8 +100,9 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
             />
           </div>
           <div>
-            <label className="block mb-1">Gate</label>
+            <label htmlFor="gate-input" className="block mb-1">Gate</label>
             <input
+              id="gate-input"
               type="number"
               min={1}
               max={100}
