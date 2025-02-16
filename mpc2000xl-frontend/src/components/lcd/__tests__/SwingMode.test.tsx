@@ -35,25 +35,25 @@ describe('SwingMode', () => {
 
     const slider = screen.getByRole('slider');
     
-    // Test lower limit first
-    fireEvent.change(slider, { target: { value: '45' } });
-    expect(onSettingsChange).toHaveBeenLastCalledWith({
-      ...initialSettings,
-      percentage: 50
-    });
-
-    // Test valid range (should round to nearest 5)
-    fireEvent.change(slider, { target: { value: '63' } });
-    expect(onSettingsChange).toHaveBeenLastCalledWith({
+    // Test valid range (should snap to nearest 5)
+    fireEvent.change(slider, { target: { value: '65' } });
+    expect(onSettingsChange).toHaveBeenCalledWith({
       ...initialSettings,
       percentage: 65
     });
 
     // Test upper limit
-    fireEvent.change(slider, { target: { value: '80' } });
-    expect(onSettingsChange).toHaveBeenLastCalledWith({
+    fireEvent.change(slider, { target: { value: '75' } });
+    expect(onSettingsChange).toHaveBeenCalledWith({
       ...initialSettings,
       percentage: 75
+    });
+
+    // Test lower limit
+    fireEvent.change(slider, { target: { value: '50' } });
+    expect(onSettingsChange).toHaveBeenCalledWith({
+      ...initialSettings,
+      percentage: 50
     });
   });
 
