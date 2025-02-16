@@ -71,7 +71,7 @@ describe('Pattern Sequencing Integration', () => {
     );
 
     // Update pattern length
-    const lengthInput = screen.getByLabelText('Length (steps)');
+    const lengthInput = screen.getByLabelText('Length:');
     fireEvent.change(lengthInput, { target: { value: '32' } });
 
     expect(mockOnPatternChange).toHaveBeenCalledWith(
@@ -111,7 +111,7 @@ describe('Pattern Sequencing Integration', () => {
     );
 
     // Change pattern resolution
-    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)');
+    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: false });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
     expect(mockOnSequenceChange).toHaveBeenCalledWith(

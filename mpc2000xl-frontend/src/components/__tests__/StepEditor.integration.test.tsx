@@ -50,7 +50,7 @@ describe('Step Editor Integration', () => {
     );
 
     // Create new event
-    fireEvent.click(screen.getByText('1')); // First step
+    fireEvent.click(screen.getAllByText('1')[0]); // First step
 
     expect(mockOnEventChange).toHaveBeenCalledWith(
       expect.objectContaining({
