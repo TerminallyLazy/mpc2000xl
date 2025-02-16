@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pattern, Sequence, StepEvent } from '../types';
+import { Pattern, Sequence } from '../types';
 
 interface PatternManagerProps {
   currentSequence: Sequence;
@@ -129,8 +129,9 @@ export const PatternManager: React.FC<PatternManagerProps> = ({
             />
           </div>
           <div>
-            <label className="block mb-1">Resolution (steps/beat)</label>
+            <label htmlFor="pattern-resolution" className="block mb-1">Resolution (steps/beat)</label>
             <select
+              id="pattern-resolution"
               value={currentPattern.resolution}
               onChange={(e) => handleResolution(Number(e.target.value))}
               className="bg-gray-700 text-green-400 p-1 w-full"
