@@ -10,6 +10,7 @@ import { Program, LCDMode, DisplayState, Sample } from './types';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
+import { PadBanks } from './components/PadBanks';
 
 function App() {
   // Mode transition handlers
@@ -231,6 +232,10 @@ function App() {
           />
         </div>
         
+        <PadBanks
+          currentBank={currentBank}
+          onBankChange={setCurrentBank}
+        />
         <div className="grid grid-cols-4 gap-4">
           {Array.from({ length: 16 }).map((_, i) => (
             <Pad
@@ -238,6 +243,7 @@ function App() {
               index={i}
               onClick={() => handlePadClick(i)}
               isPressed={pressedPad === i}
+              assignment={currentProgram?.pad_assignments[currentBank]?.[i]}
             />
           ))}
         </div>
