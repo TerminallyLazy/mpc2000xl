@@ -1,30 +1,29 @@
 export {};
 
-// Mock Web Audio API
-class MockAudioBuffer extends (global as any).AudioBuffer {
+// Define base AudioBuffer class first
+class AudioBuffer {
   length: number;
   sampleRate: number;
   numberOfChannels: number;
   duration: number;
 
-  constructor(numberOfChannels = 1, length = 44100, sampleRate = 44100) {
-    super();
-    this.numberOfChannels = numberOfChannels;
-    this.length = length;
-    this.sampleRate = sampleRate;
-    this.duration = length / sampleRate;
+  constructor(options?: { length?: number; numberOfChannels?: number; sampleRate?: number }) {
+    this.numberOfChannels = options?.numberOfChannels || 1;
+    this.length = options?.length || 44100;
+    this.sampleRate = options?.sampleRate || 44100;
+    this.duration = this.length / this.sampleRate;
   }
 
-  getChannelData() {
+  getChannelData(_channel: number): Float32Array {
     return new Float32Array(this.length);
   }
 }
 
-// Define AudioBuffer if it doesn't exist
-if (!(global as any).AudioBuffer) {
-  (global as any).AudioBuffer = class AudioBuffer {
-    constructor() {}
-  };
+// Then define MockAudioBuffer that extends it
+class MockAudioBuffer extends AudioBuffer {
+  constructor(numberOfChannels = 1, length = 44100, sampleRate = 44100) {
+    super({ numberOfChannels, length, sampleRate });
+  }
 }
 
 class MockAudioContext {
@@ -43,9 +42,12 @@ class MockAudioContext {
 }
 
 // Make it a module with side effects
+(global as any).AudioBuffer = AudioBuffer;
 (global as any).AudioContext = MockAudioContext;
-(global as any).AudioBuffer = MockAudioBuffer;
 (global as any).window = {
+  AudioBuffer,
   AudioContext: MockAudioContext,
-  AudioBuffer: MockAudioBuffer
+  crypto: {
+    randomUUID: () => '00000000-0000-0000-0000-000000000000'
+  }
 };
