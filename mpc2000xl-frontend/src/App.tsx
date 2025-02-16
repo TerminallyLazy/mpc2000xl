@@ -7,6 +7,8 @@ import { SaveMode } from './components/lcd/SaveMode';
 import { Pad } from './components/Pad';
 import { audioEngine } from './utils/audio';
 import { Program, LCDMode, DisplayState, Sample } from './types';
+import { DataWheel } from './components/DataWheel';
+import { LCD } from './components/LCD';
 
 function App() {
   // Mode transition handlers
@@ -139,9 +141,37 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-gray-100 p-8 rounded-lg shadow-2xl">
+      <div className="bg-gray-100 p-8 rounded-lg shadow-2xl flex flex-col">
+        <div className="flex justify-between items-start mb-8">
+          <div className="flex-1">
         {renderModeButtons()}
-        <div className="mb-8">
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <DataWheel
+            value={0}
+            onChange={(value) => {
+              // TODO: Handle data wheel changes based on current mode
+              console.log('Data wheel value:', value);
+            }}
+          />
+        </div>
+      </div>
+      <LCD
+        mode={currentMode}
+        line1={displayState.line1}
+        line2={displayState.line2}
+        parameters={[
+          { label: 'Program', value: currentProgram?.name || 'None' },
+          { label: 'Bank', value: currentBank },
+          { label: 'Tempo', value: '120 BPM' },
+          { label: 'Volume', value: '100%' }
+        ]}
+        statusIndicators={{
+          bank: currentBank,
+          tempo: 120
+        }}
+      />
+      <div className="mb-8">
           {currentMode === 'MAIN' && (
             <ProgramManager
               currentProgram={currentProgram}
