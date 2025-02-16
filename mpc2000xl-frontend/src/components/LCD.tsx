@@ -39,6 +39,13 @@ const formatValue = (value: string | number): string => {
 
 export const LCD: React.FC<LCDProps> = ({
   mode,
+  line1,
+  line2,
+  parameters = [],
+  statusIndicators = {},
+  menuItems = [],
+  selectedItem = 0,
+  onMenuSelect,
   activeParameter,
   line1,
   line2,

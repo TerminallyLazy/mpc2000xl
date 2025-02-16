@@ -170,11 +170,17 @@ function App() {
           newIndex = currentIndex < parameters.length - 1 ? currentIndex + 1 : 0;
         }
 
+        const newParameter = parameters[newIndex];
         setDisplayState(prev => ({
           ...prev,
-          active_parameter: parameters[newIndex],
-          line2: `${parameters[newIndex].label}: ${parameters[newIndex].value}`
+          active_parameter: newParameter,
+          line2: `${newParameter.label}: ${formatValue(newParameter.value)}`
         }));
+
+        // Play a click sound for parameter changes
+        const audio = new Audio('/click.mp3');
+        audio.volume = 0.1;
+        audio.play().catch(() => {});
       }
     };
 
