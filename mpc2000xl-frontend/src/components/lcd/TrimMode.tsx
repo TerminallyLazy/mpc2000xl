@@ -48,7 +48,13 @@ export const TrimMode: React.FC<TrimModeProps> = ({
 
       const processedBuffer = await timeStretchProcessor.processAudio(buffer, options);
       setPreviewBuffer(processedBuffer);
-      await audioEngine.playBuffer(processedBuffer);
+      
+      // Create temporary blob URL for preview
+      const blob = new Blob([processedBuffer], { type: 'audio/wav' });
+      const tempId = `preview-${Date.now()}`;
+      await audioEngine.loadSample(tempId, await blob.arrayBuffer());
+      await audioEngine.playSample(tempId);
+      audioEngine.disposeSample(tempId);
     } catch (error) {
       console.error('Preview error:', error);
     }
