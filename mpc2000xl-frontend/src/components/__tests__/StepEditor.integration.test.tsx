@@ -49,12 +49,10 @@ describe('Step Editor Integration', () => {
       </>
     );
 
-    // Create new event
-    const stepButton = screen.getAllByText('1')[0];
+    // Create new event by clicking first step
+    const stepButtons = screen.getAllByText('1');
+    const stepButton = stepButtons[0];
     fireEvent.click(stepButton);
-
-    // Wait for next tick to allow event handlers to complete
-    await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(mockOnEventChange).toHaveBeenCalledWith(
       expect.objectContaining({

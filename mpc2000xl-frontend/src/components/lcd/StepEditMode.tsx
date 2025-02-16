@@ -19,6 +19,19 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
     setSelectedStep(stepIndex);
     const event = currentPattern.events.find(e => e.stepIndex === stepIndex);
     setSelectedEvent(event || null);
+
+    // If no event exists at this step, create one
+    if (!event) {
+      const newEvent = {
+        type: 'noteOn' as const,
+        stepIndex,
+        note: 60,
+        velocity: 100,
+        duration: 1,
+        gate: 100
+      };
+      onEventChange(newEvent);
+    }
   };
 
   const handleEventUpdate = (updates: Partial<StepEvent>) => {
