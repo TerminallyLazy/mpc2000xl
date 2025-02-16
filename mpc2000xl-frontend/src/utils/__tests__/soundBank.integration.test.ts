@@ -16,7 +16,7 @@ describe('SoundBank Integration Tests', () => {
 
   it('should load TR-808 bank successfully', async () => {
     const onProgress = jest.fn();
-    await soundBankLoader.loadBank('tr-808', { onProgress });
+    await soundBankLoader.loadBank('tr-808', { onProgress: onProgress });
 
     expect(onProgress).toHaveBeenCalled();
     expect(soundBankLoader.getLoadedBanks()).toContain('tr-808');
