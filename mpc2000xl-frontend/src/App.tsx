@@ -221,30 +221,35 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-control-bg text-control-text flex items-center justify-center">
-        <ThemeToggle />
-        <QuickHelp />
-        <TransportControls 
-          onPlay={() => {
-            setIsPlaying(true);
-            audioEngine.startTransport();
-          }}
-          onStop={() => {
-            setIsPlaying(false);
-            audioEngine.stopTransport();
-          }}
-          onRecord={() => {
-            setIsRecording(true);
-            audioEngine.startRecording();
-          }}
-          onDub={() => {
-            setIsRecording(true);
-            audioEngine.startRecording();
-          }}
-          isPlaying={isPlaying}
-          isRecording={isRecording}
-        />
-        <div className="bg-control-bg p-8 rounded-lg shadow-2xl flex">
+      <div className="min-h-screen bg-control-bg text-control-text relative">
+        <div className="fixed top-4 right-4 flex items-center gap-4 z-50">
+          <ThemeToggle />
+          <QuickHelp />
+        </div>
+        <div className="container mx-auto px-4 py-8 flex min-h-screen items-center justify-center">
+          <div className="bg-control-bg/90 backdrop-blur-sm p-8 rounded-lg shadow-2xl border border-primary/20 relative">
+            <div className="flex flex-col gap-8">
+              <TransportControls
+              onPlay={() => {
+                setIsPlaying(true);
+                audioEngine.startTransport();
+              }}
+              onStop={() => {
+                setIsPlaying(false);
+                audioEngine.stopTransport();
+              }}
+              onRecord={() => {
+                setIsRecording(true);
+                audioEngine.startRecording();
+              }}
+              onDub={() => {
+                setIsRecording(true);
+                audioEngine.startRecording();
+              }}
+              isPlaying={isPlaying}
+              isRecording={isRecording}
+            />
+            <div className="flex">
           {/* Left Section */}
           <div className="flex-1 pr-8 border-r border-control-text/20">
             <LCD
@@ -430,9 +435,9 @@ function App() {
             ))}
           </div>
         </div>
-        </div>
       </div>
-    </ThemeProvider>
+    </div>
+  </ThemeProvider>
   );
 }
 

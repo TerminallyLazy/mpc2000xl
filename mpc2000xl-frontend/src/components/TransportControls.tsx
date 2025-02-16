@@ -18,7 +18,7 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
   isRecording
 }) => {
   return (
-    <div className="flex flex-col gap-2 p-4 backdrop-blur-sm bg-control-bg/80 rounded-lg shadow-xl animate-fade-in">
+    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col gap-2 p-6 backdrop-blur-sm bg-control-bg/90 rounded-lg shadow-xl border border-primary/20 animate-fade-in z-50">
       <div className="flex gap-2">
         <button
           onClick={onPlay}
