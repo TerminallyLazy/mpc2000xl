@@ -41,6 +41,7 @@ export const SwingMode: React.FC<SwingModeProps> = ({
             type="range"
             min="50"
             max="75"
+            step="5"
             value={settings.percentage}
             onChange={(e) => handlePercentageChange(Number(e.target.value))}
             className="flex-1 accent-green-500"
