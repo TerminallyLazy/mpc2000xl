@@ -89,7 +89,7 @@ export const DataWheel: React.FC<DataWheelProps> = ({
     <div className="relative">
       <div 
         ref={wheelRef}
-        className="w-24 h-24 rounded-full bg-gray-700 border-4 border-gray-600 cursor-pointer relative"
+        className="w-24 h-24 rounded-full bg-control-bg/90 border-4 border-primary/40 cursor-pointer relative hover:border-primary/60 transition-all shadow-2xl"
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <div className="absolute top-0 left-1/2 w-1 h-4 bg-green-400 transform -translate-x-1/2" />
