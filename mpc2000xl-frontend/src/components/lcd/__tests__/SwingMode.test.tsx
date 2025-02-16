@@ -25,34 +25,35 @@ describe('SwingMode', () => {
 
   it('updates percentage within valid range', () => {
     const onSettingsChange = jest.fn();
+    const initialSettings = { ...defaultSettings, percentage: 50 };
     render(
       <SwingMode
-        settings={defaultSettings}
+        settings={initialSettings}
         onSettingsChange={onSettingsChange}
       />
     );
 
     const slider = screen.getByRole('slider');
     
-    // Test lower limit first
-    fireEvent.change(slider, { target: { value: '45' } });
-    expect(onSettingsChange).toHaveBeenLastCalledWith({
-      ...defaultSettings,
-      percentage: 50
-    });
-
     // Test valid range (should round to nearest 5)
     fireEvent.change(slider, { target: { value: '63' } });
-    expect(onSettingsChange).toHaveBeenLastCalledWith({
-      ...defaultSettings,
+    expect(onSettingsChange).toHaveBeenCalledWith({
+      ...initialSettings,
       percentage: 65
     });
 
     // Test upper limit
     fireEvent.change(slider, { target: { value: '80' } });
-    expect(onSettingsChange).toHaveBeenLastCalledWith({
-      ...defaultSettings,
+    expect(onSettingsChange).toHaveBeenCalledWith({
+      ...initialSettings,
       percentage: 75
+    });
+
+    // Test lower limit
+    fireEvent.change(slider, { target: { value: '45' } });
+    expect(onSettingsChange).toHaveBeenCalledWith({
+      ...initialSettings,
+      percentage: 50
     });
   });
 
