@@ -8,13 +8,14 @@ from .routes import audio
 
 app = FastAPI()
 
-# Configure CORS
+# Configure CORS for production frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://mpc-xl-app-d16o5drt.devinapps.com"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # Include routers
