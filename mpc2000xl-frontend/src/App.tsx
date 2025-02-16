@@ -42,6 +42,37 @@ function App() {
   const [shiftActive, setShiftActive] = useState(false);
   const [currentPattern, setCurrentPattern] = useState<Pattern | null>(null);
 
+  // Handle shift key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(true);
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  // Apply pattern when generated
+  useEffect(() => {
+    if (!currentPattern) return;
+    
+    // Update LCD display
+    setDisplayState(prev => ({
+      ...prev,
+      line1: 'AI PATTERN',
+      line2: `Tempo: ${currentPattern.tempo} BPM`
+    }));
+
+    // TODO: Apply pattern to sequencer
+    console.log('New pattern generated:', currentPattern);
+  }, [currentPattern]);
+
   // Event handlers
   const handlePadClick = async (index: number) => {
     setPressedPad(index);
