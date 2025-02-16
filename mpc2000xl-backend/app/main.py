@@ -1,6 +1,5 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import magic
 import os
 from typing import List, Dict, Optional
 import uuid
@@ -37,6 +36,20 @@ async def upload_sample(file: UploadFile):
     filename = file.filename.lower()
     if not (filename.endswith('.wav') or filename.endswith('.mp3')):
         raise HTTPException(status_code=400, detail="File must be WAV or MP3")
+    
+    # Read first few bytes to validate file type
+    header = await file.read(12)
+    await file.seek(0)
+    
+    # Validate WAV header (RIFF....WAVE)
+    if filename.endswith('.wav'):
+        if not (header.startswith(b'RIFF') and header[8:12] == b'WAVE'):
+            raise HTTPException(status_code=400, detail="Invalid WAV file")
+    
+    # Validate MP3 header (ID3 or MPEG sync)
+    elif filename.endswith('.mp3'):
+        if not (header.startswith(b'ID3') or (header[0] == 0xFF and (header[1] & 0xE0) == 0xE0)):
+            raise HTTPException(status_code=400, detail="Invalid MP3 file")
     
     file_content = await file.read()
     await file.seek(0)
