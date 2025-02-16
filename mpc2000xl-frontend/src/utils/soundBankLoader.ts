@@ -1,4 +1,5 @@
-import { Sample, SoundBank, SoundBankSample } from '../types';
+import { Sample } from '../types';
+import type { SoundBank, SoundBankSample } from '../types';
 import { audioEngine } from './audio';
 
 export class SoundBankLoader {
@@ -13,7 +14,7 @@ export class SoundBankLoader {
     const sampleEntries = Object.entries(bank.samples);
     let loadedCount = 0;
 
-    for (const [sampleId, sample] of sampleEntries) {
+    for (const [sampleId, sample] of sampleEntries as [string, SoundBankSample][]) {
       try {
         const response = await fetch(sample.path);
         const arrayBuffer = await response.arrayBuffer();
