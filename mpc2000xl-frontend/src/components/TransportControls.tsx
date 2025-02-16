@@ -18,9 +18,9 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
   isRecording
 }) => {
   return (
-    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col gap-3 p-6 
-      backdrop-blur-md bg-control-bg/95 rounded-xl shadow-2xl border-2 border-primary/40 
-      animate-fade-in z-[9999]">
+    <div className="fixed bottom-0 w-full flex justify-center items-center p-4 
+      bg-control-bg/95 border-t border-primary/40 backdrop-blur-md z-50">
+      <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
       <div className="flex gap-3">
         <button
           onClick={onPlay}
@@ -66,6 +66,7 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
         >
           DUB
         </button>
+      </div>
       </div>
     </div>
   );
