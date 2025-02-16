@@ -121,13 +121,20 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Change resolution using the select element
-    const resolutionSelect = screen.getByLabelText('Resolution:', { exact: false });
+    // Click Add Pattern to show pattern controls
+    fireEvent.click(screen.getByText('Add Pattern'));
+
+    // Change resolution using the pattern resolution select
+    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: false });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
-    expect(mockOnPatternChange).toHaveBeenCalledWith(
+    expect(mockOnSequenceChange).toHaveBeenCalledWith(
       expect.objectContaining({
-        resolution: 16
+        patterns: expect.arrayContaining([
+          expect.objectContaining({
+            resolution: 16
+          })
+        ])
       })
     );
   });
