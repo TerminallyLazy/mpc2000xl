@@ -121,17 +121,14 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Click Add Pattern to show pattern controls
-    fireEvent.click(screen.getByText('Add Pattern'));
+    // Click Test Pattern to show pattern controls
+    fireEvent.click(screen.getByText('Test Pattern'));
 
     // Wait for pattern controls to appear
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    // Debug to see what's rendered
-    screen.debug();
-
     // Change resolution using the pattern resolution select
-    const resolutionSelect = screen.getByRole('combobox', { name: /resolution/i });
+    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: true });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
     expect(mockOnSequenceChange).toHaveBeenCalledWith(
