@@ -1,6 +1,6 @@
 import type { Program, DisplayState, PadAssignment } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://app-vsucgnod.fly.dev';
 
 interface APIOptions extends RequestInit {
   headers?: Record<string, string>;
