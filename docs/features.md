@@ -109,6 +109,47 @@ The sound bank system includes classic drum machine samples and the original MPC
 - Tune (-12 to +12 semitones)
 - Volume (0-100%)
 
+## Step Editor System
+
+### Step Editor Features
+- Pattern-based step sequencing
+- 16-step grid visualization
+- Note parameter control:
+  * Note value (0-127)
+  * Velocity (0-127)
+  * Gate time (1-100%)
+  * Duration (1-16 steps)
+- Pattern management:
+  * Multiple patterns per sequence
+  * Pattern length (1-64 steps)
+  * Resolution settings (4, 8, 16, 32 steps/beat)
+- Real-time parameter editing
+- Visual feedback for events
+
+### Pattern Programming Workflow
+1. Enter STEP EDIT mode
+2. Select or create pattern
+3. Set pattern length and resolution
+4. Program steps:
+   - Click step to add event
+   - Set note parameters
+   - Adjust gate and duration
+   - Delete unwanted events
+5. Manage patterns:
+   - Add new patterns
+   - Delete patterns
+   - Copy patterns
+   - Set pattern resolution
+
+### Sequence Management
+- Multiple patterns per sequence
+- Pattern chaining
+- Pattern switching
+- Global tempo control
+- Resolution per pattern
+- Event timing preservation
+- Bank organization
+
 ## Integration Features
 
 ### Audio Engine
