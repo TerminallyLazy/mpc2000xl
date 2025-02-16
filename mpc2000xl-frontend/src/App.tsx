@@ -25,7 +25,7 @@ function App() {
   const handleProgramChange = (program: Program | null) => {
     setCurrentProgram(program);
   };
-  const [_, setDisplayState] = useState<DisplayState>({
+  const [displayState, setDisplayState] = useState<DisplayState>({
     line1: 'MPC2000XL',
     line2: 'MAIN MODE',
     current_mode: 'MAIN',

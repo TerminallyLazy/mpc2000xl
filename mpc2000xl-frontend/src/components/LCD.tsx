@@ -18,7 +18,6 @@ interface LCDProps {
     tempo?: number;
     bank?: 'A' | 'B' | 'C' | 'D';
   };
-  currentPage?: number;
   menuItems?: string[];
   selectedItem?: number;
   onMenuSelect?: (index: number) => void;
@@ -30,7 +29,6 @@ export const LCD: React.FC<LCDProps> = ({
   line2,
   parameters = [],
   statusIndicators = {},
-  currentPage = 1,
   menuItems = [],
   selectedItem = 0,
   onMenuSelect
