@@ -31,12 +31,12 @@ export const DataWheel: React.FC<DataWheelProps> = ({
       if (!acceleration) return fineControl ? 0.1 : 1;
 
       // Calculate velocity (pixels per millisecond)
-      const currentVelocity = deltaY / Math.max(timeDelta, 1);
-      velocity.current = 0.8 * velocity.current + 0.2 * currentVelocity;
+      const currentVelocity = (deltaY * 1.5) / Math.max(timeDelta, 1);
+      velocity.current = 0.9 * velocity.current + 0.1 * currentVelocity;
 
-      // Base step size on velocity
-      const baseStep = Math.abs(velocity.current) * (fineControl ? 0.5 : 5);
-      return Math.min(Math.max(baseStep, fineControl ? 0.1 : 1), fineControl ? 1 : 10);
+      // Enhanced base step size with wider range
+      const baseStep = Math.abs(velocity.current) * (fineControl ? 1 : 10);
+      return Math.min(Math.max(baseStep, fineControl ? 0.1 : 1), fineControl ? 2 : 20);
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -89,7 +89,7 @@ export const DataWheel: React.FC<DataWheelProps> = ({
     <div className="relative">
       <div 
         ref={wheelRef}
-        className="w-24 h-24 rounded-full bg-gray-700 border-4 border-gray-600 cursor-pointer relative"
+        className="w-24 h-24 rounded-full bg-control-bg/90 border-4 border-primary/40 cursor-pointer relative hover:border-primary/60 transition-all shadow-2xl"
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <div className="absolute top-0 left-1/2 w-1 h-4 bg-green-400 transform -translate-x-1/2" />
