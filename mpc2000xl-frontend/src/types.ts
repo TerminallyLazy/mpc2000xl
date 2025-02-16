@@ -33,7 +33,7 @@ export interface Program {
   current_bank: PadBank['id'];
 }
 
-export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM' | 'SETUP';
+export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM' | 'SETUP' | 'STEP_EDIT';
 
 export interface Parameter {
   id: string;
@@ -64,6 +64,29 @@ export interface MidiEvent {
   controller?: number;
   value?: number;
 }
+
+export interface StepEvent extends MidiEvent {
+  stepIndex: number;
+  duration: number;
+  gate: number;
+}
+
+export interface Pattern {
+  id: string;
+  name: string;
+  events: StepEvent[];
+  length: number; // In steps
+  resolution: number; // Steps per beat
+}
+
+export interface Sequence {
+  id: string;
+  name: string;
+  patterns: Pattern[];
+  currentPattern: number;
+  tempo: number;
+}
+
 
 export interface SwingSettings {
   enabled: boolean;
