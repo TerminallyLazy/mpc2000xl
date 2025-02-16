@@ -17,6 +17,11 @@ export interface PadAssignment {
   volume: number;
 }
 
+export interface PadBank {
+  id: 'A' | 'B' | 'C' | 'D';
+  pads: Record<number, PadAssignment>;
+}
+
 export interface Program {
   id: string;
   name: string;
@@ -25,10 +30,19 @@ export interface Program {
       [pad: number]: PadAssignment;
     };
   };
-  current_bank: 'A' | 'B' | 'C' | 'D';
+  current_bank: PadBank['id'];
 }
 
-export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM';
+export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM' | 'SETUP';
+
+export interface Parameter {
+  id: string;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+}
 
 export interface DisplayState {
   line1: string;
@@ -37,4 +51,5 @@ export interface DisplayState {
   current_page: number;
   menu_items: string[];
   selected_item: number;
+  active_parameter?: Parameter;
 }
