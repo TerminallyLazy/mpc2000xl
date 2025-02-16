@@ -70,9 +70,9 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
 
   return (
     <div 
-      className={`fixed bottom-8 right-8 flex flex-col gap-3 p-4 
+      className={`flex flex-col gap-3 p-4 
         backdrop-blur-md bg-control-bg/95 rounded-xl shadow-2xl border-2 border-primary/40 
-        animate-fade-in z-[9999] cursor-move transition-all duration-300 min-w-[200px]
+        animate-fade-in cursor-move transition-all duration-300 min-w-[200px]
         ${isDragging ? 'opacity-50' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
@@ -82,41 +82,37 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
     >
-      <button 
-        onClick={toggleMinimize}
-        className="absolute top-2 right-2 text-sm text-primary hover:text-primary/80 transition-colors"
-        devinid="minimize-transport"
-      >
-        {isMinimized ? 'Expand' : 'Minimize'}
-      </button>
+      <div className="flex justify-end mb-2">
+        <button 
+          onClick={toggleMinimize}
+          className="text-sm text-primary hover:text-primary/80 transition-colors"
+          devinid="minimize-transport"
+        >
+          {isMinimized ? 'Expand' : 'Minimize'}
+        </button>
+      </div>
 
       {!isMinimized && (
-        <>
-          <div className="flex gap-3">
-            <TransportButton onClick={onPlay} active={isPlaying} devinid="play-button">
-              PLAY
-            </TransportButton>
-            <TransportButton onClick={onStop} devinid="stop-button">
-              STOP
-            </TransportButton>
-          </div>
-          <div className="flex gap-3">
-            <TransportButton onClick={onRecord} active={isRecording} devinid="record-button">
-              REC
-            </TransportButton>
-            <TransportButton onClick={onDub} devinid="dub-button">
-              DUB
-            </TransportButton>
-          </div>
-          <div className="flex gap-3">
-            <TransportButton onClick={onOverdub} devinid="overdub-button">
-              OVERDUB
-            </TransportButton>
-            <TransportButton onClick={onUndo} devinid="undo-button">
-              UNDO
-            </TransportButton>
-          </div>
-        </>
+        <div className="grid grid-cols-2 gap-3">
+          <TransportButton onClick={onPlay} active={isPlaying} devinid="play-button">
+            PLAY
+          </TransportButton>
+          <TransportButton onClick={onStop} devinid="stop-button">
+            STOP
+          </TransportButton>
+          <TransportButton onClick={onRecord} active={isRecording} devinid="record-button">
+            REC
+          </TransportButton>
+          <TransportButton onClick={onDub} devinid="dub-button">
+            DUB
+          </TransportButton>
+          <TransportButton onClick={onOverdub} devinid="overdub-button">
+            OVERDUB
+          </TransportButton>
+          <TransportButton onClick={onUndo} devinid="undo-button">
+            UNDO
+          </TransportButton>
+        </div>
       )}
     </div>
   );
