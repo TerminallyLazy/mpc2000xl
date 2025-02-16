@@ -1,16 +1,16 @@
 import React from 'react';
-import { PadBank } from '../types';
+type BankId = 'A' | 'B' | 'C' | 'D';
 
 interface PadBanksProps {
-  currentBank: PadBank['id'];
-  onBankChange: (bank: PadBank['id']) => void;
+  currentBank: BankId;
+  onBankChange: (bank: BankId) => void;
 }
 
 export const PadBanks: React.FC<PadBanksProps> = ({
   currentBank,
   onBankChange
 }) => {
-  const banks: PadBank['id'][] = ['A', 'B', 'C', 'D'];
+  const banks: BankId[] = ['A', 'B', 'C', 'D'];
 
   return (
     <div className="flex gap-2 mb-4">
