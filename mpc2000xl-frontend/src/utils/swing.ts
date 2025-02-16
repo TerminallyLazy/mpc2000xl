@@ -1,4 +1,4 @@
-import { MidiEvent } from '../types';
+import { MidiEvent, MidiEventType } from '../types';
 
 export interface SwingOptions {
   percentage: number;  // 50-75%
