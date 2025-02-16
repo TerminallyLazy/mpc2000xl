@@ -28,7 +28,7 @@ export interface Program {
   current_bank: 'A' | 'B' | 'C' | 'D';
 }
 
-export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM';
+export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM' | 'SETUP';
 
 export interface DisplayState {
   line1: string;

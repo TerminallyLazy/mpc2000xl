@@ -16,7 +16,10 @@ interface ModeButton {
 const modeButtons: ModeButton[] = [
   { primary: 'MAIN', secondary: 'LOAD', label: 'MAIN/LOAD' },
   { primary: 'PROGRAM', secondary: 'SAVE', label: 'PROGRAM/SAVE' },
-  { primary: 'TRIM', secondary: 'SETUP', label: 'TRIM/SETUP' }
+  { primary: 'TRIM', secondary: 'SETUP', label: 'TRIM/SETUP' },
+  { primary: 'MAIN', secondary: 'LOAD', label: 'NEXT SEQ' },
+  { primary: 'PROGRAM', secondary: 'SAVE', label: 'TRACK MUTE' },
+  { primary: 'TRIM', secondary: 'SETUP', label: 'TIMING CORR' }
 ];
 
 export const ModeControls: React.FC<ModeControlsProps> = ({
@@ -25,7 +28,7 @@ export const ModeControls: React.FC<ModeControlsProps> = ({
   shiftActive
 }) => {
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 grid-rows-2 gap-2">
       {modeButtons.map((button) => (
         <button
           key={button.primary}
