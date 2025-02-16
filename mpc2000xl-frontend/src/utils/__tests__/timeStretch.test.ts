@@ -1,5 +1,22 @@
 import { TimeStretchProcessor, TimeStretchOptions } from '../timeStretch';
-import { AudioContext } from 'standardized-audio-context';
+import { AudioContext, AudioBuffer } from 'standardized-audio-context';
+
+// Mock AudioContext and AudioBuffer
+jest.mock('standardized-audio-context', () => ({
+  AudioContext: jest.fn().mockImplementation(() => ({
+    createBuffer: jest.fn().mockImplementation((channels: number, length: number, sampleRate: number): AudioBuffer => ({
+      length,
+      duration: length / sampleRate,
+      numberOfChannels: channels,
+      sampleRate,
+      getChannelData: jest.fn().mockReturnValue(new Float32Array(length)),
+      copyFromChannel: jest.fn(),
+      copyToChannel: jest.fn()
+    })),
+    close: jest.fn()
+  })),
+  AudioBuffer: jest.fn()
+}));
 
 describe('TimeStretchProcessor', () => {
   let processor: TimeStretchProcessor;
