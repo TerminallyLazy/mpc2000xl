@@ -35,6 +35,15 @@ export interface Program {
 
 export type LCDMode = 'MAIN' | 'LOAD' | 'SAVE' | 'TRIM' | 'PROGRAM' | 'SETUP';
 
+export interface Parameter {
+  id: string;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+}
+
 export interface DisplayState {
   line1: string;
   line2: string;
@@ -42,4 +51,5 @@ export interface DisplayState {
   current_page: number;
   menu_items: string[];
   selected_item: number;
+  active_parameter?: Parameter;
 }

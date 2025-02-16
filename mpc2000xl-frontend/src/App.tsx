@@ -6,7 +6,7 @@ import { LoadMode } from './components/lcd/LoadMode';
 import { SaveMode } from './components/lcd/SaveMode';
 import { Pad } from './components/Pad';
 import { audioEngine } from './utils/audio';
-import { Program, LCDMode, DisplayState, Sample } from './types';
+import { Program, LCDMode, DisplayState, Sample, Parameter } from './types';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
@@ -15,13 +15,35 @@ import { LevelControl } from './components/LevelControl';
 
 function App() {
   // Mode transition handlers
+  const getModeParameters = (mode: LCDMode): Parameter[] => {
+    switch (mode) {
+      case 'TRIM':
+        return [
+          { id: 'start', label: 'Start', value: currentSample?.start_point || 0, min: 0, max: 100, step: 1 },
+          { id: 'end', label: 'End', value: currentSample?.end_point || 100, min: 0, max: 100, step: 1 },
+          { id: 'loop', label: 'Loop', value: currentSample?.loop_point || 0, min: 0, max: 100, step: 1 },
+          { id: 'tune', label: 'Tune', value: currentSample?.tune || 0, min: -12, max: 12, step: 1 }
+        ];
+      case 'PROGRAM':
+        return [
+          { id: 'velocity', label: 'Velocity', value: 100, min: 0, max: 127, step: 1 },
+          { id: 'tune', label: 'Tune', value: 0, min: -12, max: 12, step: 1 },
+          { id: 'level', label: 'Level', value: 100, min: 0, max: 100, step: 1 }
+        ];
+      default:
+        return [];
+    }
+  };
+
   const handleModeChange = (newMode: LCDMode) => {
     setCurrentMode(newMode);
+    const parameters = getModeParameters(newMode);
     setDisplayState(prev => ({
       ...prev,
       current_mode: newMode,
       line1: `${newMode} MODE`,
-      line2: currentProgram?.name || 'No Program'
+      line2: currentProgram?.name || 'No Program',
+      active_parameter: parameters[0]
     }));
   };
 
@@ -129,8 +151,33 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') setShiftActive(true);
+      if (e.key === 'Shift') {
+        setShiftActive(true);
+        return;
+      }
+
+      // Parameter selection with arrow keys
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        const parameters = getModeParameters(currentMode);
+        if (parameters.length === 0) return;
+
+        const currentIndex = parameters.findIndex(p => p.id === displayState.active_parameter?.id);
+        let newIndex = currentIndex;
+
+        if (e.key === 'ArrowUp') {
+          newIndex = currentIndex > 0 ? currentIndex - 1 : parameters.length - 1;
+        } else {
+          newIndex = currentIndex < parameters.length - 1 ? currentIndex + 1 : 0;
+        }
+
+        setDisplayState(prev => ({
+          ...prev,
+          active_parameter: parameters[newIndex],
+          line2: `${parameters[newIndex].label}: ${parameters[newIndex].value}`
+        }));
+      }
     };
+
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.key === 'Shift') setShiftActive(false);
     };
@@ -142,7 +189,7 @@ function App() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [currentMode, displayState.active_parameter?.id]);
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -193,11 +240,64 @@ function App() {
               />
             </div>
             <DataWheel
-              value={0}
+              value={displayState.active_parameter?.value || 0}
               onChange={(value) => {
-                // TODO: Handle data wheel changes based on current mode
-                console.log('Data wheel value:', value);
+                if (!displayState.active_parameter) return;
+                
+                const { id } = displayState.active_parameter;
+                switch (currentMode) {
+                  case 'TRIM':
+                    if (currentSample) {
+                      switch (id) {
+                        case 'start':
+                          handleSampleEdit.onStartPointChange(value);
+                          break;
+                        case 'end':
+                          handleSampleEdit.onEndPointChange(value);
+                          break;
+                        case 'loop':
+                          handleSampleEdit.onLoopPointChange(value);
+                          break;
+                        case 'tune':
+                          handleSampleEdit.onTuneChange(value);
+                          break;
+                      }
+                    }
+                    break;
+                  case 'PROGRAM':
+                    if (currentProgram && pressedPad !== null) {
+                      const updatedProgram = { ...currentProgram };
+                      const assignment = updatedProgram.pad_assignments[currentBank]?.[pressedPad] || {};
+                      switch (id) {
+                        case 'velocity':
+                          assignment.velocity = value;
+                          break;
+                        case 'tune':
+                          assignment.tune = value;
+                          break;
+                        case 'level':
+                          assignment.volume = value;
+                          break;
+                      }
+                      updatedProgram.pad_assignments[currentBank][pressedPad] = assignment;
+                      setCurrentProgram(updatedProgram);
+                    }
+                    break;
+                }
+
+                setDisplayState(prev => ({
+                  ...prev,
+                  line2: `${displayState.active_parameter?.label}: ${value}`,
+                  active_parameter: {
+                    ...prev.active_parameter!,
+                    value
+                  }
+                }));
               }}
+              min={displayState.active_parameter?.min || 0}
+              max={displayState.active_parameter?.max || 100}
+              acceleration={true}
+              fineControl={shiftActive}
             />
           </div>
         </div>
