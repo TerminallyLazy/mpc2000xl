@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "standardized-audio-context": "^25.3.77",
+    "web-audio-api": "^0.2.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@types/jest": "^29.5.14",
+    "@types/testing-library__jest-dom": "^5.14.9",
+    "@types/testing-library__react": "^10.0.1"
+  }
+}

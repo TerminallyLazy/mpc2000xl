@@ -53,3 +53,34 @@ export interface DisplayState {
   selected_item: number;
   active_parameter?: Parameter;
 }
+
+export type MidiEventType = 'noteOn' | 'noteOff' | 'controlChange';
+
+export interface MidiEvent {
+  type: MidiEventType;
+  time: number;
+  note?: number;
+  velocity?: number;
+  controller?: number;
+  value?: number;
+}
+
+export interface SwingSettings {
+  enabled: boolean;
+  percentage: number;  // 50-75%
+  resolution: number;  // typically 16
+}
+
+export interface SoundBankSample {
+  path: string;
+  type: 'wav';
+  category: string;
+  name: string;
+}
+
+export interface SoundBank {
+  id: string;
+  name: string;
+  description?: string;
+  samples: Record<string, SoundBankSample>;
+}
