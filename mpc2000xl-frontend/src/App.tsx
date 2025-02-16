@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { ProgramManager } from './components/ProgramManager';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ThemeToggle } from './components/ThemeToggle';
+import { QuickHelp } from './components/QuickHelp';
+import { TransportControls } from './components/TransportControls';
 
 const formatValue = (value: string | number): string => {
   if (typeof value === 'number') {
@@ -221,6 +223,27 @@ function App() {
     <ThemeProvider>
       <div className="min-h-screen bg-control-bg text-control-text flex items-center justify-center">
         <ThemeToggle />
+        <QuickHelp />
+        <TransportControls 
+          onPlay={() => {
+            setIsPlaying(true);
+            audioEngine.startTransport();
+          }}
+          onStop={() => {
+            setIsPlaying(false);
+            audioEngine.stopTransport();
+          }}
+          onRecord={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onDub={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          isPlaying={isPlaying}
+          isRecording={isRecording}
+        />
         <div className="bg-control-bg p-8 rounded-lg shadow-2xl flex">
           {/* Left Section */}
           <div className="flex-1 pr-8 border-r border-control-text/20">
