@@ -7,6 +7,7 @@ interface PlayOptions {
 
 class AudioEngine {
   private players: Map<string, Tone.Player> = new Map();
+  private recorder: Tone.Recorder | null = null;
   
   async loadSample(id: string, audioBuffer: ArrayBuffer) {
     try {
@@ -77,6 +78,30 @@ class AudioEngine {
       player.dispose();
     }
     this.players.clear();
+  }
+
+  async startTransport(): Promise<void> {
+    await Tone.start();
+    Tone.Transport.start();
+  }
+
+  stopTransport(): void {
+    Tone.Transport.stop();
+    Tone.Transport.position = 0;
+  }
+
+  startRecording(): void {
+    if (!this.recorder) {
+      this.recorder = new Tone.Recorder();
+      Tone.Destination.connect(this.recorder);
+    }
+    this.recorder.start();
+  }
+
+  async stopRecording(): Promise<Blob> {
+    if (!this.recorder) return new Blob();
+    const recording = await this.recorder.stop();
+    return recording;
   }
 }
 
