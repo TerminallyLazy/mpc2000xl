@@ -17,7 +17,7 @@ const modeButtons: ModeButton[] = [
   { primary: 'MAIN', secondary: 'LOAD', label: 'MAIN/LOAD' },
   { primary: 'PROGRAM', secondary: 'SAVE', label: 'PROGRAM/SAVE' },
   { primary: 'TRIM', secondary: 'SETUP', label: 'TRIM/SETUP' },
-  { primary: 'MAIN', secondary: 'LOAD', label: 'NEXT SEQ' },
+  { primary: 'STEP_EDIT', secondary: 'LOAD', label: 'STEP EDIT' },
   { primary: 'PROGRAM', secondary: 'SAVE', label: 'TRACK MUTE' },
   { primary: 'TRIM', secondary: 'SETUP', label: 'TIMING CORR' }
 ];
