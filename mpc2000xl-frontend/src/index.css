@@ -1,27 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 5px rgba(var(--color-primary), 0.5); }
+  50% { box-shadow: 0 0 15px rgba(var(--color-primary), 0.8); }
+  100% { box-shadow: 0 0 5px rgba(var(--color-primary), 0.5); }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.4s ease-out;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s infinite;
+  }
+}
+
 @layer base {
   :root {
-    --radius: 0.5rem
-  ;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --radius: 0.5rem;
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --lcd-background: #c7d2fe;
+    --lcd-text: #1e293b;
+    --pad-active: #22c55e;
+    --pad-inactive: #4b5563;
+    --control-background: #f3f4f6;
+    --control-text: #111827;
+  }
+
   .dark {
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%
+    --color-primary: #3b82f6;
+    --color-primary-dark: #2563eb;
+    --lcd-background: #1e293b;
+    --lcd-text: #e5e7eb;
+    --pad-active: #22c55e;
+    --pad-inactive: #374151;
+    --control-background: #1f2937;
+    --control-text: #f3f4f6;
   }
 }
 
