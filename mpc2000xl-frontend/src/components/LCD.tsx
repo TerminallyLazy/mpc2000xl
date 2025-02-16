@@ -27,8 +27,19 @@ interface LCDProps {
   };
 }
 
+const formatValue = (value: string | number): string => {
+  if (typeof value === 'number') {
+    if (Number.isInteger(value)) {
+      return value.toString();
+    }
+    return value.toFixed(1);
+  }
+  return value;
+};
+
 export const LCD: React.FC<LCDProps> = ({
   mode,
+  activeParameter,
   line1,
   line2,
   parameters = [],
@@ -59,17 +70,17 @@ export const LCD: React.FC<LCDProps> = ({
       </div>
 
       {/* Parameters */}
-      {parameters.length > 0 && (
+      {parameters && parameters.length > 0 && (
         <div className="px-4 py-2 grid grid-cols-2 gap-2 text-xs border-b border-gray-700">
           {parameters.map((param, index) => (
             <div 
               key={index}
               className={`flex justify-between ${
                 activeParameter?.label === param.label ? 'bg-green-900' : ''
-              }`}
+              } transition-colors duration-150`}
             >
               <span>{param.label}:</span>
-              <span>{param.value}</span>
+              <span>{formatValue(param.value)}</span>
             </div>
           ))}
         </div>
@@ -77,10 +88,13 @@ export const LCD: React.FC<LCDProps> = ({
       
       {/* Active Parameter Display */}
       {activeParameter && (
-        <div className="px-4 py-2 text-sm border-t border-gray-700">
+        <div className="px-4 py-2 text-sm border-t border-gray-700 bg-gray-800">
           <div className="flex justify-between items-center">
-            <span className="font-bold">{activeParameter.label}</span>
-            <span className="text-green-400">{activeParameter.value}</span>
+            <span className="font-bold text-green-400">{activeParameter.label}</span>
+            <span className="text-green-400">{formatValue(activeParameter.value)}</span>
+          </div>
+          <div className="mt-1 text-xs text-gray-400">
+            Use ↑↓ to select parameter, Data Wheel to adjust
           </div>
         </div>
       )}
