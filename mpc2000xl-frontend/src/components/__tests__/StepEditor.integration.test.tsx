@@ -63,13 +63,20 @@ describe('Step Editor Integration', () => {
       })
     );
 
+    // Wait for event parameters to appear
+    await new Promise(resolve => setTimeout(resolve, 0));
+
     // Edit event parameters
-    const noteInput = screen.getByLabelText('Note');
+    const noteInput = screen.getByLabelText('Note', { exact: false });
     fireEvent.change(noteInput, { target: { value: '72' } });
 
     expect(mockOnEventChange).toHaveBeenCalledWith(
       expect.objectContaining({
-        note: 72
+        note: 72,
+        stepIndex: 0,
+        type: 'noteOn',
+        velocity: 100,
+        time: 0
       })
     );
 
@@ -108,8 +115,8 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Change resolution
-    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: false });
+    // Change resolution using the select element
+    const resolutionSelect = screen.getByRole('combobox', { name: /resolution/i });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
     expect(mockOnSequenceChange).toHaveBeenCalledWith(
