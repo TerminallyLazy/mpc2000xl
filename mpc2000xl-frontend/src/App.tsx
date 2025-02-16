@@ -10,7 +10,7 @@ import { LoadMode } from './components/lcd/LoadMode';
 import { SaveMode } from './components/lcd/SaveMode';
 import { Pad } from './components/Pad';
 import { audioEngine } from './utils/audio';
-import { Program, LCDMode, DisplayState, Sample, Parameter, Pattern } from './types';
+import { Program, LCDMode, DisplayState, Sample, Parameter } from './types';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
