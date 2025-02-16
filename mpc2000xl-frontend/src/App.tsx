@@ -40,6 +40,22 @@ function App() {
   const [isRecording, setIsRecording] = useState(false);
   const [shiftActive, setShiftActive] = useState(false);
 
+  // Handle shift key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(true);
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
   // Event handlers
   const handlePadClick = async (index: number) => {
     setPressedPad(index);
@@ -243,7 +259,6 @@ function App() {
           isPlaying={isPlaying}
           isRecording={isRecording}
         />
-        </div>
         </div>
 
         {/* Main content */}
