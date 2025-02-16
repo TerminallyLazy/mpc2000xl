@@ -12,11 +12,28 @@ export const QuickHelp: React.FC = () => {
       ]
     },
     {
+      title: 'Loading Default Sounds',
+      items: [
+        '1. Click the "LOAD" mode button',
+        '2. Select a soundbank (TR-808, TR-909, or MPC2000XL)',
+        '3. Choose a sample from the list',
+        '4. Press "PROGRAM" mode to assign samples to pads'
+      ]
+    },
+    {
+      title: 'Available Soundbanks',
+      items: [
+        'TR-808: Classic Roland drum machine',
+        'TR-909: Iconic dance music drums',
+        'MPC2000XL: Original factory sounds'
+      ]
+    },
+    {
       title: 'Sample Management',
       items: [
-        'Load samples in LOAD mode',
         'Edit samples in TRIM mode',
-        'Assign samples to pads in PROGRAM mode'
+        'Use zoom controls for detailed editing',
+        'Set start, end, and loop points'
       ]
     },
     {
