@@ -63,11 +63,8 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Wait for event parameters to appear
-    await new Promise(resolve => setTimeout(resolve, 0));
-
-    // Edit event parameters
-    const noteInput = screen.getByLabelText('Note', { exact: false });
+    // Edit event parameters using the note input
+    const noteInput = screen.getByRole('spinbutton', { name: /note/i });
     fireEvent.change(noteInput, { target: { value: '72' } });
 
     expect(mockOnEventChange).toHaveBeenCalledWith(
@@ -76,7 +73,9 @@ describe('Step Editor Integration', () => {
         stepIndex: 0,
         type: 'noteOn',
         velocity: 100,
-        time: 0
+        time: 0,
+        duration: 1,
+        gate: 100
       })
     );
 
@@ -116,7 +115,7 @@ describe('Step Editor Integration', () => {
     );
 
     // Change resolution using the select element
-    const resolutionSelect = screen.getByRole('combobox', { name: /resolution/i });
+    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)');
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
     expect(mockOnSequenceChange).toHaveBeenCalledWith(

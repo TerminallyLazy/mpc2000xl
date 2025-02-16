@@ -18,8 +18,7 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
   const handleStepSelect = (stepIndex: number) => {
     setSelectedStep(stepIndex);
     const event = currentPattern.events.find(e => e.stepIndex === stepIndex);
-    setSelectedEvent(event || null);
-
+    
     // If no event exists at this step, create one
     if (!event) {
       const newEvent = {
@@ -32,6 +31,9 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
         time: stepIndex * (60000 / (120 * currentPattern.resolution)) // Calculate time based on tempo and resolution
       };
       onEventChange(newEvent);
+      setSelectedEvent(newEvent);
+    } else {
+      setSelectedEvent(event);
     }
   };
 
