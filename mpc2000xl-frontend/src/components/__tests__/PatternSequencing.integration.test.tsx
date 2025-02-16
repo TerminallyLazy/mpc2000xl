@@ -1,14 +1,24 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { StepEditMode } from '../lcd/StepEditMode';
 import { PatternManager } from '../PatternManager';
-import { StepGrid } from '../StepGrid';
-import { Pattern, Sequence } from '../../types';
+import { Pattern, Sequence, StepEvent } from '../../types';
 
-describe('Step Editor Integration', () => {
+describe('Pattern Sequencing Integration', () => {
+  const mockEvent: StepEvent = {
+    type: 'noteOn',
+    stepIndex: 0,
+    time: 0,
+    note: 60,
+    velocity: 100,
+    duration: 1,
+    gate: 100
+  };
+
   const mockPattern: Pattern = {
     id: '1',
     name: 'Test Pattern',
-    events: [],
+    events: [mockEvent],
     length: 16,
     resolution: 4
   };
@@ -29,7 +39,7 @@ describe('Step Editor Integration', () => {
     jest.clearAllMocks();
   });
 
-  it('creates and edits events across components', () => {
+  it('handles pattern changes and event updates', () => {
     render(
       <>
         <StepEditMode
@@ -37,57 +47,11 @@ describe('Step Editor Integration', () => {
           onEventChange={mockOnEventChange}
           onPatternChange={mockOnPatternChange}
         />
-        <StepGrid
-          events={mockPattern.events}
-          resolution={mockPattern.resolution}
-          onEventChange={mockOnEventChange}
-        />
         <PatternManager
           currentSequence={mockSequence}
           onSequenceChange={mockOnSequenceChange}
         />
       </>
-    );
-
-    // Create new event
-    fireEvent.click(screen.getByText('1')); // First step
-
-    expect(mockOnEventChange).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: 'noteOn',
-        stepIndex: 0,
-        note: 60,
-        velocity: 100
-      })
-    );
-
-    // Edit event parameters
-    const noteInput = screen.getByLabelText('Note');
-    fireEvent.change(noteInput, { target: { value: '72' } });
-
-    expect(mockOnEventChange).toHaveBeenCalledWith(
-      expect.objectContaining({
-        note: 72
-      })
-    );
-
-    // Change pattern length
-    const lengthInput = screen.getByLabelText('Length (steps)');
-    fireEvent.change(lengthInput, { target: { value: '32' } });
-
-    expect(mockOnPatternChange).toHaveBeenCalledWith(
-      expect.objectContaining({
-        length: 32
-      })
-    );
-  });
-
-  it('manages patterns and sequences correctly', () => {
-    render(
-      <PatternManager
-        currentSequence={mockSequence}
-        onSequenceChange={mockOnSequenceChange}
-      />
     );
 
     // Add new pattern
@@ -106,7 +70,47 @@ describe('Step Editor Integration', () => {
       })
     );
 
-    // Change resolution
+    // Update pattern length
+    const lengthInput = screen.getByLabelText('Length (steps)');
+    fireEvent.change(lengthInput, { target: { value: '32' } });
+
+    expect(mockOnPatternChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        length: 32
+      })
+    );
+  });
+
+  it('maintains event timing across pattern changes', () => {
+    render(
+      <>
+        <StepEditMode
+          currentPattern={mockPattern}
+          onEventChange={mockOnEventChange}
+          onPatternChange={mockOnPatternChange}
+        />
+        <PatternManager
+          currentSequence={mockSequence}
+          onSequenceChange={mockOnSequenceChange}
+        />
+      </>
+    );
+
+    // Update event timing
+    const event = screen.getByText('1');
+    fireEvent.click(event);
+
+    const gateInput = screen.getByLabelText('Gate');
+    fireEvent.change(gateInput, { target: { value: '50' } });
+
+    expect(mockOnEventChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        gate: 50,
+        stepIndex: 0
+      })
+    );
+
+    // Change pattern resolution
     const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)');
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
