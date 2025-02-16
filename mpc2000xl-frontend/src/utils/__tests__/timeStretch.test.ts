@@ -73,7 +73,12 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(testBuffer, options);
-    expect(result instanceof AudioBuffer).toBe(true);
+    expect(typeof result.getChannelData).toBe('function');
+    expect(typeof result.copyToChannel).toBe('function');
+    expect(typeof result.copyFromChannel).toBe('function');
+    expect(typeof result.length).toBe('number');
+    expect(typeof result.numberOfChannels).toBe('number');
+    expect(typeof result.sampleRate).toBe('number');
     expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
   });
 
@@ -85,7 +90,12 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(testBuffer, options);
-    expect(result instanceof AudioBuffer).toBe(true);
+    expect(typeof result.getChannelData).toBe('function');
+    expect(typeof result.copyToChannel).toBe('function');
+    expect(typeof result.copyFromChannel).toBe('function');
+    expect(typeof result.length).toBe('number');
+    expect(typeof result.numberOfChannels).toBe('number');
+    expect(typeof result.sampleRate).toBe('number');
     expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
   });
 
@@ -97,7 +107,12 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(testBuffer, options);
-    expect(result instanceof AudioBuffer).toBe(true);
+    expect(typeof result.getChannelData).toBe('function');
+    expect(typeof result.copyToChannel).toBe('function');
+    expect(typeof result.copyFromChannel).toBe('function');
+    expect(typeof result.length).toBe('number');
+    expect(typeof result.numberOfChannels).toBe('number');
+    expect(typeof result.sampleRate).toBe('number');
     expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
   });
 });
@@ -158,7 +173,12 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(buffer, options);
-    expect(result instanceof AudioBuffer).toBe(true);
+    expect(typeof result.getChannelData).toBe('function');
+    expect(typeof result.copyToChannel).toBe('function');
+    expect(typeof result.copyFromChannel).toBe('function');
+    expect(typeof result.length).toBe('number');
+    expect(typeof result.numberOfChannels).toBe('number');
+    expect(typeof result.sampleRate).toBe('number');
     expect(result.length).toBe(Math.floor(buffer.length * (100 / options.ratio)));
   });
 });
