@@ -182,7 +182,27 @@ function App() {
             />
           </div>
         </div>
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-4">
+            <LevelControl
+              type="main"
+              value={mainVolume}
+              onChange={setMainVolume}
+              label="MAIN"
+            />
+            <LevelControl
+              type="record"
+              value={recordLevel}
+              onChange={setRecordLevel}
+              label="REC"
+            />
+            <LevelControl
+              type="note"
+              value={noteVariation}
+              onChange={setNoteVariation}
+              label="NOTE VAR"
+            />
+          </div>
           <DataWheel
             value={0}
             onChange={(value) => {
@@ -280,5 +300,3 @@ function App() {
 }
 
 export default App;
-
-export default App
