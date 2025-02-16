@@ -55,9 +55,9 @@ export class SoundBankLoader {
 
   private async fetchBankMetadata(bankId: string): Promise<SoundBank | null> {
     try {
-      const response = await fetch(`/api/banks/${bankId}`);
-      if (!response.ok) return null;
-      return await response.json();
+      // Use default banks instead of API call
+      const { defaultBanks } = await import('./defaultBanks');
+      return defaultBanks[bankId] || null;
     } catch (error) {
       console.error('Error fetching bank metadata:', error);
       return null;
