@@ -70,3 +70,17 @@ export interface SwingSettings {
   percentage: number;  // 50-75%
   resolution: number;  // typically 16
 }
+
+export interface SoundBankSample {
+  path: string;
+  type: 'wav';
+  category: string;
+  name: string;
+}
+
+export interface SoundBank {
+  id: string;
+  name: string;
+  description?: string;
+  samples: Record<string, SoundBankSample>;
+}
