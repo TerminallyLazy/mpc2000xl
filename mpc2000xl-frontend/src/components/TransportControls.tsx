@@ -24,35 +24,45 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onPlay}
-          className={`w-16 h-16 rounded-full backdrop-blur-md ${
-            isPlaying ? 'bg-primary/80' : 'bg-control-bg/60'
-          } text-control-text font-bold hover:bg-primary/60 transition-all`}
+          className={`w-20 h-20 rounded-full backdrop-blur-md ${
+            isPlaying ? 'bg-primary/90 shadow-inner' : 'bg-control-bg/80'
+          } text-control-text font-bold hover:bg-primary/70 transition-all 
+          shadow-lg border border-primary/40`}
           aria-label="Play"
+          devinid="play-button"
         >
           PLAY
         </button>
         <button
           onClick={onStop}
-          className="w-16 h-16 rounded-full backdrop-blur-md bg-control-bg/60 text-control-text font-bold hover:bg-primary/40 transition-all"
+          className="w-20 h-20 rounded-full backdrop-blur-md bg-control-bg/80 
+            text-control-text font-bold hover:bg-primary/50 transition-all 
+            shadow-lg border border-primary/40"
           aria-label="Stop"
+          devinid="stop-button"
         >
           STOP
         </button>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <button
           onClick={onRecord}
-          className={`w-16 h-16 rounded-full backdrop-blur-md ${
-            isRecording ? 'bg-primary/80' : 'bg-control-bg/60'
-          } text-control-text font-bold hover:bg-primary/60 transition-all`}
+          className={`w-20 h-20 rounded-full backdrop-blur-md ${
+            isRecording ? 'bg-primary/90 shadow-inner' : 'bg-control-bg/80'
+          } text-control-text font-bold hover:bg-primary/70 transition-all 
+          shadow-lg border border-primary/40`}
           aria-label="Record"
+          devinid="record-button"
         >
           REC
         </button>
         <button
           onClick={onDub}
-          className="w-16 h-16 rounded-full backdrop-blur-md bg-control-bg/60 text-control-text font-bold hover:bg-primary/40 transition-all"
+          className="w-20 h-20 rounded-full backdrop-blur-md bg-control-bg/80 
+            text-control-text font-bold hover:bg-primary/50 transition-all 
+            shadow-lg border border-primary/40"
           aria-label="Overdub"
+          devinid="dub-button"
         >
           DUB
         </button>
