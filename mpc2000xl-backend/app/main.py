@@ -5,6 +5,7 @@ import os
 from typing import List, Dict, Optional
 import uuid
 from .models import Sample, DisplayState, Program, PadAssignment, SoundParameters
+from .routes import audio
 
 app = FastAPI()
 
@@ -16,6 +17,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(audio.router, prefix="/audio", tags=["audio"])
 
 # In-memory storage
 samples: Dict[str, Sample] = {}
