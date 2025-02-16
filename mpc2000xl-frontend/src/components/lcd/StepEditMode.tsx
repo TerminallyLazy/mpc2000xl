@@ -32,6 +32,13 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
     onEventChange(updatedEvent);
   };
 
+  const handlePatternUpdate = (updates: Partial<Pattern>) => {
+    onPatternChange({
+      ...currentPattern,
+      ...updates
+    });
+  };
+
   return (
     <div className="bg-gray-800 text-green-400 font-mono p-4 w-full">
       <div className="mb-2 text-lg">STEP EDIT</div>
@@ -39,7 +46,18 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
       {/* Pattern Info */}
       <div className="mb-4">
         <div>Pattern: {currentPattern.name}</div>
-        <div>Length: {currentPattern.length} steps</div>
+        <div>
+          Length: 
+          <input
+            type="number"
+            min={1}
+            max={64}
+            value={currentPattern.length}
+            onChange={e => handlePatternUpdate({ length: Number(e.target.value) })}
+            className="bg-gray-700 text-green-400 p-1 ml-2 w-16"
+          />
+          steps
+        </div>
         <div>Resolution: {currentPattern.resolution} steps/beat</div>
       </div>
 
