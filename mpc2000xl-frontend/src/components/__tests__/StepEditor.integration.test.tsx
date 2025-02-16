@@ -115,7 +115,7 @@ describe('Step Editor Integration', () => {
     );
 
     // Change resolution using the select element
-    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)');
+    const resolutionSelect = screen.getByRole('combobox', { name: /resolution/i });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
     expect(mockOnSequenceChange).toHaveBeenCalledWith(
