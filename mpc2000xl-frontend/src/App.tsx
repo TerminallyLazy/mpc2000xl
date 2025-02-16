@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProgramManager } from './components/ProgramManager';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ThemeToggle } from './components/ThemeToggle';
@@ -10,7 +10,7 @@ import { LoadMode } from './components/lcd/LoadMode';
 import { SaveMode } from './components/lcd/SaveMode';
 import { Pad } from './components/Pad';
 import { audioEngine } from './utils/audio';
-import { Program, LCDMode, DisplayState, Sample, Parameter } from './types';
+import { Program, LCDMode, DisplayState, Sample, Parameter, Pattern } from './types';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
@@ -214,7 +214,8 @@ function App() {
           <QuickHelp />
         </div>
         
-        <TransportControls
+        <div className="fixed bottom-8 right-8 z-50">
+          <TransportControls
           onPlay={() => {
             setIsPlaying(true);
             audioEngine.startTransport();
@@ -242,6 +243,7 @@ function App() {
           isPlaying={isPlaying}
           isRecording={isRecording}
         />
+        </div>
         </div>
 
         {/* Main content */}
