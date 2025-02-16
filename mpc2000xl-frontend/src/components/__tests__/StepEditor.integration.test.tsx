@@ -107,7 +107,7 @@ describe('Step Editor Integration', () => {
     );
 
     // Change resolution
-    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)');
+    const resolutionSelect = screen.getByLabelText('Resolution (steps/beat)', { exact: false });
     fireEvent.change(resolutionSelect, { target: { value: '16' } });
 
     expect(mockOnSequenceChange).toHaveBeenCalledWith(
