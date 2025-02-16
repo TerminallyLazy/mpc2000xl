@@ -130,7 +130,7 @@ export const SampleEditor: React.FC<SampleEditorProps> = ({
     drawWaveform();
   }, [sample, zoomLevel, scrollPosition]);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = (_e: React.UIEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
     setScrollPosition(scrollLeft / (scrollWidth - clientWidth));
