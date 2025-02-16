@@ -118,7 +118,7 @@ export class TimeStretchProcessor {
             
             if (inputPos + i + bestOffset >= 0 && inputPos + i + bestOffset < inputData.length) {
               outputChannel[outputPos + i] += 
-                inputChannel[inputPos + i + bestOffset] * fadeIn;
+                inputChannel[inputPos + i + bestOffset] * fadeIn * fadeOut;
             }
           }
         }

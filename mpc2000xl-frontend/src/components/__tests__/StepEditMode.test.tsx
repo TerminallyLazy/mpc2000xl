@@ -1,7 +1,6 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { StepEditMode } from '../lcd/StepEditMode';
-import { Pattern, StepEvent } from '../../types';
+import { Pattern } from '../../types';
 
 describe('StepEditMode', () => {
   const mockPattern: Pattern = {
