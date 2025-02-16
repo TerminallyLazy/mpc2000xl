@@ -1,3 +1,5 @@
+export {};
+
 // Mock Web Audio API
 class MockAudioContext {
   createBuffer() {
@@ -9,17 +11,13 @@ class MockAudioContext {
     };
   }
 
-  decodeAudioData(buffer: ArrayBuffer) {
+  decodeAudioData(_buffer: ArrayBuffer) {
     return Promise.resolve(this.createBuffer());
   }
 }
 
-declare global {
-  var AudioContext: any;
-  var window: any;
-}
-
-globalThis.AudioContext = MockAudioContext as any;
-globalThis.window = {
+// Make it a module with side effects
+(global as any).AudioContext = MockAudioContext;
+(global as any).window = {
   AudioContext: MockAudioContext
-} as any;
+};
