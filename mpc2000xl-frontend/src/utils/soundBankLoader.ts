@@ -1,6 +1,7 @@
 import { Sample } from '../types';
 import type { SoundBank, SoundBankSample } from '../types';
 import { audioEngine } from './audio';
+import { defaultBanks } from './defaultBanks';
 
 export class SoundBankLoader {
   private readonly MAX_MEMORY_MB = 16;
@@ -56,7 +57,6 @@ export class SoundBankLoader {
   private async fetchBankMetadata(bankId: string): Promise<SoundBank | null> {
     try {
       // Use default banks instead of API call
-      const defaultBanks = (await import('./defaultBanks')).defaultBanks;
       return defaultBanks[bankId] || null;
     } catch (error) {
       console.error('Error fetching bank metadata:', error);
