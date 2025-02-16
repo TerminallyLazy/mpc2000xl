@@ -25,33 +25,57 @@ describe('SwingMode', () => {
 
   it('updates percentage within valid range', () => {
     const onSettingsChange = jest.fn();
-    render(
+    const initialSettings = { ...defaultSettings, percentage: 50 };
+    
+    // Create component with mock settings
+    const { rerender } = render(
       <SwingMode
-        settings={defaultSettings}
+        settings={initialSettings}
         onSettingsChange={onSettingsChange}
       />
     );
 
     const slider = screen.getByRole('slider');
     
-    // Test valid range
+    // Test valid range (should snap to nearest 5)
     fireEvent.change(slider, { target: { value: '65' } });
-    expect(onSettingsChange).toHaveBeenCalledWith({
-      ...defaultSettings,
+    expect(onSettingsChange).toHaveBeenCalledTimes(1);
+    expect(onSettingsChange).toHaveBeenLastCalledWith({
+      ...initialSettings,
       percentage: 65
     });
 
+    // Update component with new settings
+    const settings65 = { ...initialSettings, percentage: 65 };
+    rerender(
+      <SwingMode
+        settings={settings65}
+        onSettingsChange={onSettingsChange}
+      />
+    );
+
     // Test upper limit
-    fireEvent.change(slider, { target: { value: '80' } });
-    expect(onSettingsChange).toHaveBeenCalledWith({
-      ...defaultSettings,
+    fireEvent.change(slider, { target: { value: '75' } });
+    expect(onSettingsChange).toHaveBeenCalledTimes(2);
+    expect(onSettingsChange).toHaveBeenLastCalledWith({
+      ...settings65,
       percentage: 75
     });
 
+    // Update component with new settings
+    const settings75 = { ...settings65, percentage: 75 };
+    rerender(
+      <SwingMode
+        settings={settings75}
+        onSettingsChange={onSettingsChange}
+      />
+    );
+
     // Test lower limit
-    fireEvent.change(slider, { target: { value: '45' } });
-    expect(onSettingsChange).toHaveBeenCalledWith({
-      ...defaultSettings,
+    fireEvent.change(slider, { target: { value: '50' } });
+    expect(onSettingsChange).toHaveBeenCalledTimes(3);
+    expect(onSettingsChange).toHaveBeenLastCalledWith({
+      ...settings75,
       percentage: 50
     });
   });

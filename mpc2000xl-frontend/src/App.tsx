@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ProgramManager } from './components/ProgramManager';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeToggle } from './components/ThemeToggle';
+import { QuickHelp } from './components/QuickHelp';
+import { TransportControls } from './components/TransportControls';
 
 const formatValue = (value: string | number): string => {
   if (typeof value === 'number') {
@@ -83,6 +87,8 @@ function App() {
   const [mainVolume, setMainVolume] = useState(100);
   const [recordLevel, setRecordLevel] = useState(75);
   const [noteVariation, setNoteVariation] = useState(50);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
   const handlePadClick = async (index: number) => {
     setPressedPad(index);
@@ -214,11 +220,34 @@ function App() {
   }, [currentMode, displayState.active_parameter?.id]);
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-gray-100 p-8 rounded-lg shadow-2xl flex">
-        {/* Left Section */}
-        <div className="flex-1 pr-8 border-r border-gray-300">
-          <LCD
+    <ThemeProvider>
+      <div className="min-h-screen bg-control-bg text-control-text flex items-center justify-center">
+        <ThemeToggle />
+        <QuickHelp />
+        <TransportControls 
+          onPlay={() => {
+            setIsPlaying(true);
+            audioEngine.startTransport();
+          }}
+          onStop={() => {
+            setIsPlaying(false);
+            audioEngine.stopTransport();
+          }}
+          onRecord={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onDub={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          isPlaying={isPlaying}
+          isRecording={isRecording}
+        />
+        <div className="bg-control-bg p-8 rounded-lg shadow-2xl flex">
+          {/* Left Section */}
+          <div className="flex-1 pr-8 border-r border-control-text/20">
+            <LCD
             mode={currentMode}
             line1={displayState.line1}
             line2={displayState.line2}
@@ -401,8 +430,9 @@ function App() {
             ))}
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

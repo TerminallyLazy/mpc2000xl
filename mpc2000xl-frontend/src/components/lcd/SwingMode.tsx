@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SwingSettings } from '../../types';
 
 interface SwingModeProps {
@@ -11,9 +11,15 @@ export const SwingMode: React.FC<SwingModeProps> = ({
   onSettingsChange
 }) => {
   const handlePercentageChange = (value: number) => {
+    // First clamp to valid range
+    const clampedValue = Math.min(75, Math.max(50, value));
+    // Then round to nearest 5
+    const roundedValue = Math.round(clampedValue / 5) * 5;
+    
+    // Always trigger change to match MPC2000XL behavior
     onSettingsChange({
       ...settings,
-      percentage: Math.min(75, Math.max(50, value))
+      percentage: roundedValue
     });
   };
 
@@ -35,6 +41,7 @@ export const SwingMode: React.FC<SwingModeProps> = ({
             type="range"
             min="50"
             max="75"
+            step="5"
             value={settings.percentage}
             onChange={(e) => handlePercentageChange(Number(e.target.value))}
             className="flex-1 accent-green-500"

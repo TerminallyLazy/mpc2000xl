@@ -118,7 +118,7 @@ export class TimeStretchProcessor {
             
             if (inputPos + i + bestOffset >= 0 && inputPos + i + bestOffset < inputData.length) {
               outputChannel[outputPos + i] += 
-                inputChannel[inputPos + i + bestOffset] * fadeIn;
+                inputChannel[inputPos + i + bestOffset] * fadeIn * fadeOut;
             }
           }
         }
@@ -459,15 +459,20 @@ export class TimeStretchProcessor {
       throw new Error('Time stretch ratio must be between 50% and 200%');
     }
 
+    // Validate algorithm index
     if (options.algorithmIndex < 0 || options.algorithmIndex >= this.algorithms.length) {
       throw new Error('Invalid algorithm index');
     }
 
-    const algorithm = this.algorithms[options.algorithmIndex];
-    if (algorithm.quality !== options.quality) {
-      throw new Error('Algorithm quality does not match requested quality');
+    // Find algorithms matching requested quality
+    const matchingAlgorithms = this.algorithms.filter(a => a.quality === options.quality);
+    
+    if (matchingAlgorithms.length === 0) {
+      throw new Error(`No algorithm found for quality ${options.quality}`);
     }
 
+    // Use specified algorithm index within matching quality group
+    const algorithm = matchingAlgorithms[options.algorithmIndex % matchingAlgorithms.length];
     return algorithm.process(buffer, options.ratio);
   }
 

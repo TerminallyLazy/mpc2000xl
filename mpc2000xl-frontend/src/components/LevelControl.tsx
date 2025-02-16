@@ -10,7 +10,6 @@ interface LevelControlProps {
 export const LevelControl: React.FC<LevelControlProps> = ({
   value,
   onChange,
-  type,
   label
 }) => {
   const sliderRef = useRef<HTMLDivElement>(null);
