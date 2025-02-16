@@ -72,7 +72,7 @@ export const TransportControls: React.FC<TransportControlsProps> = ({
     <div 
       className={`fixed bottom-8 right-8 flex flex-col gap-3 p-4 
         backdrop-blur-md bg-control-bg/95 rounded-xl shadow-2xl border-2 border-primary/40 
-        animate-fade-in z-[9999] cursor-move transition-all duration-300
+        animate-fade-in z-[9999] cursor-move transition-all duration-300 min-w-[200px]
         ${isDragging ? 'opacity-50' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,

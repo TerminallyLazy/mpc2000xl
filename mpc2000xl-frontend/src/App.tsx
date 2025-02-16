@@ -215,25 +215,33 @@ function App() {
         </div>
         
         <TransportControls
-            onPlay={() => {
-              setIsPlaying(true);
-              audioEngine.startTransport();
-            }}
-            onStop={() => {
-              setIsPlaying(false);
-              audioEngine.stopTransport();
-            }}
-            onRecord={() => {
-              setIsRecording(true);
-              audioEngine.startRecording();
-            }}
-            onDub={() => {
-              setIsRecording(true);
-              audioEngine.startRecording();
-            }}
-            isPlaying={isPlaying}
-            isRecording={isRecording}
-          />
+          onPlay={() => {
+            setIsPlaying(true);
+            audioEngine.startTransport();
+          }}
+          onStop={() => {
+            setIsPlaying(false);
+            audioEngine.stopTransport();
+          }}
+          onRecord={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onDub={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onOverdub={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onUndo={() => {
+            // TODO: Implement undo functionality
+            console.log('Undo clicked');
+          }}
+          isPlaying={isPlaying}
+          isRecording={isRecording}
+        />
         </div>
 
         {/* Main content */}
