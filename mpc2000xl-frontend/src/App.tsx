@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProgramManager } from './components/ProgramManager';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ThemeToggle } from './components/ThemeToggle';
@@ -10,7 +10,7 @@ import { LoadMode } from './components/lcd/LoadMode';
 import { SaveMode } from './components/lcd/SaveMode';
 import { Pad } from './components/Pad';
 import { audioEngine } from './utils/audio';
-import { Program, LCDMode, DisplayState, Sample, Parameter } from './types';
+import { Program, LCDMode, DisplayState, Sample, Parameter, Pattern } from './types';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
@@ -39,6 +39,22 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [shiftActive, setShiftActive] = useState(false);
+
+  // Handle shift key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(true);
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   // Event handlers
   const handlePadClick = async (index: number) => {
@@ -214,28 +230,35 @@ function App() {
           <QuickHelp />
         </div>
         
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 
-          bg-control-bg/90 backdrop-blur-sm p-4 rounded-lg shadow-xl border border-primary/20">
+        <div className="fixed bottom-8 right-8 z-50">
           <TransportControls
-            onPlay={() => {
-              setIsPlaying(true);
-              audioEngine.startTransport();
-            }}
-            onStop={() => {
-              setIsPlaying(false);
-              audioEngine.stopTransport();
-            }}
-            onRecord={() => {
-              setIsRecording(true);
-              audioEngine.startRecording();
-            }}
-            onDub={() => {
-              setIsRecording(true);
-              audioEngine.startRecording();
-            }}
-            isPlaying={isPlaying}
-            isRecording={isRecording}
-          />
+          onPlay={() => {
+            setIsPlaying(true);
+            audioEngine.startTransport();
+          }}
+          onStop={() => {
+            setIsPlaying(false);
+            audioEngine.stopTransport();
+          }}
+          onRecord={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onDub={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onOverdub={() => {
+            setIsRecording(true);
+            audioEngine.startRecording();
+          }}
+          onUndo={() => {
+            // TODO: Implement undo functionality
+            console.log('Undo clicked');
+          }}
+          isPlaying={isPlaying}
+          isRecording={isRecording}
+        />
         </div>
 
         {/* Main content */}
