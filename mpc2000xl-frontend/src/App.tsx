@@ -210,6 +210,10 @@ function App() {
               bank: currentBank,
               tempo: 120
             }}
+            activeParameter={displayState.active_parameter ? {
+              label: displayState.active_parameter.label,
+              value: displayState.active_parameter.value
+            } : undefined}
           />
           <div className="mt-8">
             <ModeControls

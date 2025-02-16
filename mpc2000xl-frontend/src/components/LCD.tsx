@@ -1,7 +1,7 @@
 import React from 'react';
 import { LCDMode } from '../types';
 
-interface Parameter {
+interface LCDParameter {
   label: string;
   value: string | number;
   selected?: boolean;
@@ -11,7 +11,7 @@ interface LCDProps {
   mode: LCDMode;
   line1: string;
   line2: string;
-  parameters?: Parameter[];
+  parameters?: LCDParameter[];
   statusIndicators?: {
     recording?: boolean;
     playing?: boolean;
@@ -21,6 +21,10 @@ interface LCDProps {
   menuItems?: string[];
   selectedItem?: number;
   onMenuSelect?: (index: number) => void;
+  activeParameter?: {
+    label: string;
+    value: number;
+  };
 }
 
 export const LCD: React.FC<LCDProps> = ({
@@ -60,12 +64,24 @@ export const LCD: React.FC<LCDProps> = ({
           {parameters.map((param, index) => (
             <div 
               key={index}
-              className={`flex justify-between ${param.selected ? 'bg-green-900' : ''}`}
+              className={`flex justify-between ${
+                activeParameter?.label === param.label ? 'bg-green-900' : ''
+              }`}
             >
               <span>{param.label}:</span>
               <span>{param.value}</span>
             </div>
           ))}
+        </div>
+      )}
+      
+      {/* Active Parameter Display */}
+      {activeParameter && (
+        <div className="px-4 py-2 text-sm border-t border-gray-700">
+          <div className="flex justify-between items-center">
+            <span className="font-bold">{activeParameter.label}</span>
+            <span className="text-green-400">{activeParameter.value}</span>
+          </div>
         </div>
       )}
 
