@@ -1,39 +1,31 @@
 export {};
 
-// Define interfaces
-interface IAudioBuffer {
-  numberOfChannels: number;
-  length: number;
-  sampleRate: number;
-  duration: number;
-  channels: Float32Array[];
-  getChannelData(channel: number): Float32Array;
-  copyToChannel(source: Float32Array, channelNumber: number, startInChannel?: number): void;
-  copyFromChannel(destination: Float32Array, channelNumber: number, startInChannel?: number): void;
-}
-
 // Define AudioBuffer constructor
-function AudioBuffer(this: IAudioBuffer, numberOfChannels = 1, length = 44100, sampleRate = 44100) {
+function AudioBuffer(this: any, numberOfChannels = 1, length = 44100, sampleRate = 44100) {
   if (!(this instanceof AudioBuffer)) {
     return new (AudioBuffer as any)(numberOfChannels, length, sampleRate);
   }
 
-  this.numberOfChannels = numberOfChannels;
-  this.length = length;
-  this.sampleRate = sampleRate;
-  this.duration = length / sampleRate;
-  this.channels = Array.from({ length: numberOfChannels }, () => new Float32Array(length));
-  return this;
+  Object.defineProperties(this, {
+    numberOfChannels: { value: numberOfChannels, writable: false },
+    length: { value: length, writable: false },
+    sampleRate: { value: sampleRate, writable: false },
+    duration: { value: length / sampleRate, writable: false },
+    channels: { 
+      value: Array.from({ length: numberOfChannels }, () => new Float32Array(length)),
+      writable: false 
+    }
+  });
 }
 
-AudioBuffer.prototype.getChannelData = function(this: IAudioBuffer, channel: number): Float32Array {
+AudioBuffer.prototype.getChannelData = function(channel: number): Float32Array {
   if (channel < 0 || channel >= this.numberOfChannels) {
     throw new Error('Invalid channel index');
   }
   return this.channels[channel];
 };
 
-AudioBuffer.prototype.copyToChannel = function(this: IAudioBuffer, source: Float32Array, channelNumber: number, startInChannel = 0): void {
+AudioBuffer.prototype.copyToChannel = function(source: Float32Array, channelNumber: number, startInChannel = 0): void {
   if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
     throw new Error('Invalid channel index');
   }
@@ -42,7 +34,7 @@ AudioBuffer.prototype.copyToChannel = function(this: IAudioBuffer, source: Float
   channel.set(source.subarray(0, copyLength), startInChannel);
 };
 
-AudioBuffer.prototype.copyFromChannel = function(this: IAudioBuffer, destination: Float32Array, channelNumber: number, startInChannel = 0): void {
+AudioBuffer.prototype.copyFromChannel = function(destination: Float32Array, channelNumber: number, startInChannel = 0): void {
   if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
     throw new Error('Invalid channel index');
   }
@@ -51,30 +43,22 @@ AudioBuffer.prototype.copyFromChannel = function(this: IAudioBuffer, destination
   destination.set(channel.subarray(startInChannel, startInChannel + copyLength));
 };
 
-// Define interfaces
-interface IAudioContext {
-  createBuffer(numberOfChannels: number, length: number, sampleRate: number): IAudioBuffer;
-  decodeAudioData(buffer: ArrayBuffer): Promise<IAudioBuffer>;
-  close(): Promise<void>;
-}
-
 // Define AudioContext constructor
-function MockAudioContext(this: IAudioContext) {
+function MockAudioContext(this: any) {
   if (!(this instanceof MockAudioContext)) {
     return new (MockAudioContext as any)();
   }
-  return this;
 }
 
-MockAudioContext.prototype.createBuffer = function(this: IAudioContext, numberOfChannels: number, length: number, sampleRate: number): IAudioBuffer {
+MockAudioContext.prototype.createBuffer = function(numberOfChannels: number, length: number, sampleRate: number): AudioBuffer {
   return new (AudioBuffer as any)(numberOfChannels, length, sampleRate);
 };
 
-MockAudioContext.prototype.decodeAudioData = function(this: IAudioContext, _buffer: ArrayBuffer): Promise<IAudioBuffer> {
+MockAudioContext.prototype.decodeAudioData = function(_buffer: ArrayBuffer): Promise<AudioBuffer> {
   return Promise.resolve(new (AudioBuffer as any)());
 };
 
-MockAudioContext.prototype.close = function(this: IAudioContext): Promise<void> {
+MockAudioContext.prototype.close = function(): Promise<void> {
   return Promise.resolve();
 };
 
