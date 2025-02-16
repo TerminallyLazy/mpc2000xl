@@ -10,7 +10,8 @@ import { LoadMode } from './components/lcd/LoadMode';
 import { SaveMode } from './components/lcd/SaveMode';
 import { Pad } from './components/Pad';
 import { audioEngine } from './utils/audio';
-import { Program, LCDMode, DisplayState, Sample, Parameter } from './types';
+import { Program, LCDMode, DisplayState, Sample, Parameter, Pattern } from './types';
+import { AIBeatGenerator } from './components/ai/AIBeatGenerator';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
 import { ModeControls } from './components/ModeControls';
@@ -39,6 +40,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [shiftActive, setShiftActive] = useState(false);
+  const [currentPattern, setCurrentPattern] = useState<Pattern | null>(null);
 
   // Event handlers
   const handlePadClick = async (index: number) => {
@@ -212,6 +214,10 @@ function App() {
         <div className="fixed top-4 right-4 flex items-center gap-4 z-50">
           <ThemeToggle />
           <QuickHelp />
+        </div>
+        
+        <div className="fixed top-4 left-4 z-50">
+          <AIBeatGenerator onPatternGenerated={setCurrentPattern} />
         </div>
         
         <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 
