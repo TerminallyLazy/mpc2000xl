@@ -1,5 +1,4 @@
-import { soundBankManager, SoundBank, SoundBankManager } from '../soundBank';
-import { Sample } from '../../types';
+import { soundBankManager, SoundBankManager } from '../soundBank';
 
 // Mock AudioContext and fetch
 const mockAudioContext = {
