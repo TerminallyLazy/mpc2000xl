@@ -8,10 +8,10 @@ class AudioBuffer {
   duration: number;
   private channels: Float32Array[];
 
-  constructor(options?: { length?: number; numberOfChannels?: number; sampleRate?: number }) {
-    this.numberOfChannels = options?.numberOfChannels || 1;
-    this.length = options?.length || 44100;
-    this.sampleRate = options?.sampleRate || 44100;
+  constructor(numberOfChannels = 1, length = 44100, sampleRate = 44100) {
+    this.numberOfChannels = numberOfChannels;
+    this.length = length;
+    this.sampleRate = sampleRate;
     this.duration = this.length / this.sampleRate;
     this.channels = Array.from({ length: this.numberOfChannels }, () => new Float32Array(this.length));
   }
@@ -44,11 +44,11 @@ class AudioBuffer {
 
 class MockAudioContext {
   createBuffer(numberOfChannels: number, length: number, sampleRate: number) {
-    return new MockAudioBuffer(numberOfChannels, length, sampleRate);
+    return new AudioBuffer(numberOfChannels, length, sampleRate);
   }
 
   decodeAudioData(_buffer: ArrayBuffer) {
-    return Promise.resolve(new MockAudioBuffer());
+    return Promise.resolve(new AudioBuffer());
   }
 
   close() {
