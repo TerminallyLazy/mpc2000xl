@@ -463,11 +463,7 @@ export class TimeStretchProcessor {
       throw new Error('Invalid algorithm index');
     }
 
-    const algorithm = this.algorithms[options.algorithmIndex];
-    if (algorithm.quality !== options.quality) {
-      throw new Error('Algorithm quality does not match requested quality');
-    }
-
+    const algorithm = this.algorithms.find(a => a.quality === options.quality) || this.algorithms[0];
     return algorithm.process(buffer, options.ratio);
   }
 
