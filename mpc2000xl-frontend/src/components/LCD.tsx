@@ -46,10 +46,7 @@ export const LCD: React.FC<LCDProps> = ({
   menuItems = [],
   selectedItem = 0,
   onMenuSelect,
-  activeParameter,
-  line1,
-  line2,
-  parameters = [],
+  activeParameter
   statusIndicators = {},
   menuItems = [],
   selectedItem = 0,

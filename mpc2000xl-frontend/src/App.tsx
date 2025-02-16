@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
 import { ProgramManager } from './components/ProgramManager';
+
+const formatValue = (value: string | number): string => {
+  if (typeof value === 'number') {
+    if (Number.isInteger(value)) {
+      return value.toString();
+    }
+    return value.toFixed(1);
+  }
+  return value;
+};
 import { TrimMode } from './components/lcd/TrimMode';
 import { ProgramMode } from './components/lcd/ProgramMode';
 import { LoadMode } from './components/lcd/LoadMode';
