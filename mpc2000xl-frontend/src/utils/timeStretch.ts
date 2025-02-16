@@ -282,8 +282,59 @@ export class TimeStretchProcessor {
     hopSize: number,
     searchWindow: number
   ): Promise<AudioBuffer> {
-    // Enhanced WSOLA implementation with configurable parameters
-    return this.wsolaTimeStretch(buffer, ratio);
+    const inputData = buffer.getChannelData(0);
+    const outputLength = Math.floor(inputData.length * (100 / ratio));
+    const outputBuffer = this.audioContext.createBuffer(
+      buffer.numberOfChannels,
+      outputLength,
+      buffer.sampleRate
+    );
+
+    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+      const inputChannel = buffer.getChannelData(channel);
+      const outputChannel = outputBuffer.getChannelData(channel);
+      let inputPos = 0;
+      let outputPos = 0;
+
+      while (outputPos < outputLength - windowSize) {
+        // Find the best matching position within the search window
+        let bestOffset = 0;
+        let bestCorrelation = -1;
+
+        for (let i = -searchWindow; i <= searchWindow; i++) {
+          let correlation = 0;
+          for (let j = 0; j < windowSize; j++) {
+            if (inputPos + j + i >= 0 && inputPos + j + i < inputData.length) {
+              correlation += Math.abs(
+                inputChannel[inputPos + j] * inputChannel[inputPos + j + i]
+              );
+            }
+          }
+          if (correlation > bestCorrelation) {
+            bestCorrelation = correlation;
+            bestOffset = i;
+          }
+        }
+
+        // Copy and overlap-add the window
+        for (let i = 0; i < windowSize; i++) {
+          if (outputPos + i < outputLength) {
+            const fadeIn = 0.5 * (1 - Math.cos((Math.PI * i) / windowSize));
+            const fadeOut = 0.5 * (1 + Math.cos((Math.PI * i) / windowSize));
+            
+            if (inputPos + i + bestOffset >= 0 && inputPos + i + bestOffset < inputData.length) {
+              outputChannel[outputPos + i] += 
+                inputChannel[inputPos + i + bestOffset] * fadeIn * fadeOut;
+            }
+          }
+        }
+
+        inputPos += Math.floor(hopSize * (ratio / 100));
+        outputPos += hopSize;
+      }
+    }
+
+    return outputBuffer;
   }
 
   private async processPhaseVocoder(
@@ -292,8 +343,43 @@ export class TimeStretchProcessor {
     fftSize: number,
     hopSize: number
   ): Promise<AudioBuffer> {
-    // Enhanced phase vocoder implementation with configurable parameters
-    return this.phaseVocoderTimeStretch(buffer, ratio);
+    const outputLength = Math.floor(buffer.length * (100 / ratio));
+    const outputBuffer = this.audioContext.createBuffer(
+      buffer.numberOfChannels,
+      outputLength,
+      buffer.sampleRate
+    );
+
+    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+      const inputData = buffer.getChannelData(channel);
+      const outputData = outputBuffer.getChannelData(channel);
+
+      // Process in overlapping frames
+      for (let i = 0; i < outputLength - fftSize; i += hopSize) {
+        const frame = new Float32Array(fftSize);
+        const inputOffset = Math.floor(i * (ratio / 100));
+
+        // Apply Hann window and copy frame
+        for (let j = 0; j < fftSize; j++) {
+          if (inputOffset + j < inputData.length) {
+            const hannWindow = 0.5 * (1 - Math.cos((2 * Math.PI * j) / fftSize));
+            frame[j] = inputData[inputOffset + j] * hannWindow;
+          }
+        }
+
+        // Process frame
+        const processedFrame = await this.processFrame(frame);
+
+        // Overlap-add to output
+        for (let j = 0; j < fftSize; j++) {
+          if (i + j < outputLength) {
+            outputData[i + j] += processedFrame[j];
+          }
+        }
+      }
+    }
+
+    return outputBuffer;
   }
 
   private async processGranular(
