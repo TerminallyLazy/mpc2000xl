@@ -21,6 +21,90 @@ jest.mock('standardized-audio-context', () => ({
 describe('TimeStretchProcessor', () => {
   let processor: TimeStretchProcessor;
   let audioContext: AudioContext;
+  let testBuffer: AudioBuffer;
+
+  beforeEach(() => {
+    processor = new TimeStretchProcessor();
+    audioContext = new AudioContext();
+    testBuffer = audioContext.createBuffer(2, 44100, 44100);
+  });
+
+  afterEach(() => {
+    audioContext.close();
+  });
+
+  it('should initialize with all quality presets', () => {
+    const algorithms = processor.getAlgorithms();
+    const qualities = algorithms.map(algo => algo.quality);
+    expect(qualities).toContain('A');
+    expect(qualities).toContain('B');
+    expect(qualities).toContain('C');
+  });
+
+  it('should validate time stretch ratio', async () => {
+    const options: TimeStretchOptions = {
+      quality: 'A',
+      ratio: 30,
+      algorithmIndex: 0
+    };
+
+    await expect(processor.processAudio(testBuffer, options)).rejects.toThrow(
+      'Time stretch ratio must be between 50% and 200%'
+    );
+  });
+
+  it('should validate algorithm index', async () => {
+    const options: TimeStretchOptions = {
+      quality: 'A',
+      ratio: 75,
+      algorithmIndex: 999
+    };
+
+    await expect(processor.processAudio(testBuffer, options)).rejects.toThrow(
+      'Invalid algorithm index'
+    );
+  });
+
+  it('should process audio with standard quality', async () => {
+    const options: TimeStretchOptions = {
+      quality: 'A',
+      ratio: 75,
+      algorithmIndex: 0
+    };
+
+    const result = await processor.processAudio(testBuffer, options);
+    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
+  });
+
+  it('should process audio with better quality', async () => {
+    const options: TimeStretchOptions = {
+      quality: 'B',
+      ratio: 150,
+      algorithmIndex: 2
+    };
+
+    const result = await processor.processAudio(testBuffer, options);
+    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
+  });
+
+  it('should process audio with highest quality', async () => {
+    const options: TimeStretchOptions = {
+      quality: 'C',
+      ratio: 200,
+      algorithmIndex: 4
+    };
+
+    const result = await processor.processAudio(testBuffer, options);
+    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
+  });
+});
+
+describe('TimeStretchProcessor', () => {
+  let processor: TimeStretchProcessor;
+  let audioContext: AudioContext;
 
   beforeEach(() => {
     processor = new TimeStretchProcessor();
