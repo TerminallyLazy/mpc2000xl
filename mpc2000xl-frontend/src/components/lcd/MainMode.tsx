@@ -21,8 +21,8 @@ export const MainMode: React.FC<MainModeProps> = ({
           className="bg-gray-700 text-green-400 border border-green-400 px-2 py-1"
           value={currentProgram?.id || ''}
           onChange={(e) => {
-            const program = programs.find(p => p.id === e.target.value);
-            onProgramSelect(program || null);
+            const selectedProgram = programs.find(p => p.id === e.target.value);
+            onProgramSelect(selectedProgram || null);
           }}
         >
           <option value="">Select Program</option>
