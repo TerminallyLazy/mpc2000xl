@@ -34,8 +34,8 @@ describe('SwingMode', () => {
 
     const slider = screen.getByRole('slider');
     
-    // Test valid range
-    fireEvent.change(slider, { target: { value: '65' } });
+    // Test valid range (should round to nearest 5)
+    fireEvent.change(slider, { target: { value: '63' } });
     expect(onSettingsChange).toHaveBeenCalledWith({
       ...defaultSettings,
       percentage: 65
