@@ -1,58 +1,49 @@
 export {};
 
-// Define AudioBuffer class
-class AudioBufferBase {
-  numberOfChannels: number;
-  length: number;
-  sampleRate: number;
-  duration: number;
-  protected channels: Float32Array[];
-
-  constructor(numberOfChannels = 1, length = 44100, sampleRate = 44100) {
-    this.numberOfChannels = numberOfChannels;
-    this.length = length;
-    this.sampleRate = sampleRate;
-    this.duration = length / sampleRate;
-    this.channels = Array.from({ length: numberOfChannels }, () => new Float32Array(length));
-  }
-
-  getChannelData(channel: number): Float32Array {
-    if (channel < 0 || channel >= this.numberOfChannels) {
-      throw new Error('Invalid channel index');
-    }
-    return this.channels[channel];
-  }
-
-  copyToChannel(source: Float32Array, channelNumber: number, startInChannel = 0): void {
-    if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
-      throw new Error('Invalid channel index');
-    }
-    const channel = this.channels[channelNumber];
-    const copyLength = Math.min(source.length, channel.length - startInChannel);
-    channel.set(source.subarray(0, copyLength), startInChannel);
-  }
-
-  copyFromChannel(destination: Float32Array, channelNumber: number, startInChannel = 0): void {
-    if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
-      throw new Error('Invalid channel index');
-    }
-    const channel = this.channels[channelNumber];
-    const copyLength = Math.min(destination.length, channel.length - startInChannel);
-    destination.set(channel.subarray(startInChannel, startInChannel + copyLength));
-  }
-}
-
-// Create AudioBuffer constructor function
-const AudioBuffer = function(this: any, numberOfChannels = 1, length = 44100, sampleRate = 44100) {
+// Define AudioBuffer constructor
+function AudioBuffer(this: any, numberOfChannels = 1, length = 44100, sampleRate = 44100) {
   if (!(this instanceof AudioBuffer)) {
     return new (AudioBuffer as any)(numberOfChannels, length, sampleRate);
   }
-  return new AudioBufferBase(numberOfChannels, length, sampleRate);
-} as any;
 
-// Set up prototype chain
-AudioBuffer.prototype = AudioBufferBase.prototype;
-Object.setPrototypeOf(AudioBuffer, AudioBufferBase);
+  Object.defineProperties(this, {
+    numberOfChannels: { value: numberOfChannels, writable: false },
+    length: { value: length, writable: false },
+    sampleRate: { value: sampleRate, writable: false },
+    duration: { value: length / sampleRate, writable: false },
+    channels: { 
+      value: Array.from({ length: numberOfChannels }, () => new Float32Array(length)),
+      writable: false 
+    }
+  });
+
+  return this;
+}
+
+AudioBuffer.prototype.getChannelData = function(channel: number): Float32Array {
+  if (channel < 0 || channel >= this.numberOfChannels) {
+    throw new Error('Invalid channel index');
+  }
+  return this.channels[channel];
+};
+
+AudioBuffer.prototype.copyToChannel = function(source: Float32Array, channelNumber: number, startInChannel = 0): void {
+  if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
+    throw new Error('Invalid channel index');
+  }
+  const channel = this.channels[channelNumber];
+  const copyLength = Math.min(source.length, channel.length - startInChannel);
+  channel.set(source.subarray(0, copyLength), startInChannel);
+};
+
+AudioBuffer.prototype.copyFromChannel = function(destination: Float32Array, channelNumber: number, startInChannel = 0): void {
+  if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
+    throw new Error('Invalid channel index');
+  }
+  const channel = this.channels[channelNumber];
+  const copyLength = Math.min(destination.length, channel.length - startInChannel);
+  destination.set(channel.subarray(startInChannel, startInChannel + copyLength));
+};
 
 // Define AudioContext constructor
 function MockAudioContext(this: any) {
@@ -80,6 +71,6 @@ MockAudioContext.prototype.close = function(): Promise<void> {
   AudioBuffer,
   AudioContext: MockAudioContext,
   crypto: {
-    randomUUID: () => '00000000-0000-0000-0000-000000000000'
+    randomUUID: () => Math.random().toString(36).substring(2) + Date.now().toString(36)
   }
 };
