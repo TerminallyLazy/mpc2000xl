@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pattern, StepEvent } from '../../types';
+import { AIBeatGenerator } from '../ai/AIBeatGenerator';
 
 interface StepEditModeProps {
   currentPattern: Pattern;
@@ -58,6 +59,8 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
   return (
     <div className="bg-gray-800 text-green-400 font-mono p-4 w-full">
       <div className="mb-2 text-lg">STEP EDIT</div>
+      
+      <AIBeatGenerator onPatternGenerated={handlePatternUpdate} />
       
       {/* Pattern Info */}
       <div className="mb-4">
