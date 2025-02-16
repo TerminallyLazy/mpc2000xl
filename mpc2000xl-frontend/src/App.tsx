@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProgramManager } from './components/ProgramManager';
 import { TrimMode } from './components/lcd/TrimMode';
 import { ProgramMode } from './components/lcd/ProgramMode';
@@ -9,6 +9,7 @@ import { audioEngine } from './utils/audio';
 import { Program, LCDMode, DisplayState, Sample } from './types';
 import { DataWheel } from './components/DataWheel';
 import { LCD } from './components/LCD';
+import { ModeControls } from './components/ModeControls';
 
 function App() {
   // Mode transition handlers
@@ -119,32 +120,35 @@ function App() {
     }
   };
 
-  // Mode navigation buttons
-  const renderModeButtons = () => {
-    const modes: LCDMode[] = ['MAIN', 'TRIM', 'PROGRAM', 'LOAD', 'SAVE'];
-    return (
-      <div className="flex gap-2 mb-4">
-        {modes.map(mode => (
-          <button
-            key={mode}
-            className={`px-4 py-2 border ${
-              currentMode === mode ? 'bg-green-900 border-green-400' : 'border-gray-600'
-            }`}
-            onClick={() => handleModeChange(mode)}
-          >
-            {mode}
-          </button>
-        ))}
-      </div>
-    );
-  };
+  const [shiftActive, setShiftActive] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(true);
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') setShiftActive(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
       <div className="bg-gray-100 p-8 rounded-lg shadow-2xl flex flex-col">
         <div className="flex justify-between items-start mb-8">
           <div className="flex-1">
-        {renderModeButtons()}
+        <ModeControls
+          currentMode={currentMode}
+          onModeChange={handleModeChange}
+          shiftActive={shiftActive}
+        />
         </div>
         <div className="flex-1 flex items-center justify-center">
           <DataWheel
