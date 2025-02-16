@@ -12,6 +12,7 @@ export interface Sample {
 
 export interface PadAssignment {
   sample_id?: string;
+  name?: string;
   velocity: number;
   tune: number;
   volume: number;
