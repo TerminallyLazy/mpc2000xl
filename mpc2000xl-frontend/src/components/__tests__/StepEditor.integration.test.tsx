@@ -29,7 +29,7 @@ describe('Step Editor Integration', () => {
     jest.clearAllMocks();
   });
 
-  it('creates and edits events across components', () => {
+  it('creates and edits events across components', async () => {
     render(
       <>
         <StepEditMode
@@ -50,7 +50,11 @@ describe('Step Editor Integration', () => {
     );
 
     // Create new event
-    fireEvent.click(screen.getAllByText('1')[0]); // First step
+    const stepButton = screen.getAllByText('1')[0];
+    fireEvent.click(stepButton);
+
+    // Wait for next tick to allow event handlers to complete
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(mockOnEventChange).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -82,7 +86,7 @@ describe('Step Editor Integration', () => {
     );
   });
 
-  it('manages patterns and sequences correctly', () => {
+  it('manages patterns and sequences correctly', async () => {
     render(
       <PatternManager
         currentSequence={mockSequence}
