@@ -11,14 +11,18 @@ export const SwingMode: React.FC<SwingModeProps> = ({
   onSettingsChange
 }) => {
   const handlePercentageChange = (value: number) => {
-    // Clamp value between 50-75 and round to nearest 5
+    // First clamp to valid range
     const clampedValue = Math.min(75, Math.max(50, value));
+    // Then round to nearest 5
     const roundedValue = Math.round(clampedValue / 5) * 5;
     
-    onSettingsChange({
-      ...settings,
-      percentage: roundedValue
-    });
+    // Only trigger change if value is different
+    if (roundedValue !== settings.percentage) {
+      onSettingsChange({
+        ...settings,
+        percentage: roundedValue
+      });
+    }
   };
 
   const handleResolutionChange = (value: number) => {
