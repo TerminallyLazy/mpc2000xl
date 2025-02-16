@@ -16,7 +16,11 @@ export const SwingMode: React.FC<SwingModeProps> = ({
     // Then round to nearest 5
     const roundedValue = Math.round(clampedValue / 5) * 5;
     
-    // Always trigger change to match MPC2000XL behavior
+    // Only trigger if value would actually change
+    if (roundedValue === settings.percentage) {
+      return;
+    }
+    
     onSettingsChange({
       ...settings,
       percentage: roundedValue
