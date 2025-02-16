@@ -39,7 +39,10 @@ describe('StepEditMode', () => {
 
     expect(screen.getByText('STEP EDIT')).toBeInTheDocument();
     expect(screen.getByText(`Pattern: ${mockPattern.name}`)).toBeInTheDocument();
-    expect(screen.getByText(`Length: ${mockPattern.length} steps`)).toBeInTheDocument();
+    
+    // Check length input exists with correct value
+    const lengthInput = screen.getByRole('spinbutton', { name: /length/i });
+    expect(lengthInput).toHaveValue(mockPattern.length);
   });
 
   it('displays step grid with correct number of steps', () => {
