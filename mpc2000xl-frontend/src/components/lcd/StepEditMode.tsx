@@ -28,7 +28,8 @@ export const StepEditMode: React.FC<StepEditModeProps> = ({
         note: 60,
         velocity: 100,
         duration: 1,
-        gate: 100
+        gate: 100,
+        time: stepIndex * (60000 / (120 * currentPattern.resolution)) // Calculate time based on tempo and resolution
       };
       onEventChange(newEvent);
     }
