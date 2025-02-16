@@ -4,6 +4,9 @@ RUN apt-get update && \
     apt-get install -y \
     build-essential \
     libsndfile1 \
+    python3-numpy \
+    python3-scipy \
+    python3-librosa \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
