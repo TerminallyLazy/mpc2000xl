@@ -17,20 +17,21 @@ export const Pad: React.FC<PadProps> = ({
   return (
     <button
       className={`
-        w-[60px] h-[60px] rounded-sm relative
+        w-[60px] h-[60px] rounded-sm relative backdrop-blur-sm animate-slide-in
         ${isPressed 
-          ? 'bg-gray-600 shadow-inner' 
+          ? 'bg-pad-active/90 shadow-inner' 
           : assignment?.sample_id
-            ? 'bg-gray-700 shadow-md hover:bg-gray-600 border border-green-400'
-            : 'bg-gray-700 shadow-md hover:bg-gray-600'
+            ? 'bg-pad-inactive/80 shadow-lg hover:bg-pad-active/70 border border-primary/80'
+            : 'bg-pad-inactive/80 shadow-lg hover:bg-pad-active/70'
         } 
-        transition-all
+        transition-all duration-200
       `}
+      devinid={`pad-${index}`}
       onClick={onClick}
     >
-      <span className="text-xs text-gray-400">{index + 1}</span>
+      <span className="text-xs text-control-text/60">{index + 1}</span>
       {assignment?.sample_id && (
-        <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-green-400" />
+        <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
       )}
     </button>
   );
