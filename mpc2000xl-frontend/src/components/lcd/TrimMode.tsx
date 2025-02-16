@@ -50,7 +50,9 @@ export const TrimMode: React.FC<TrimModeProps> = ({
       setPreviewBuffer(processedBuffer);
       
       // Create temporary blob URL for preview
-      const blob = new Blob([processedBuffer], { type: 'audio/wav' });
+      // Convert AudioBuffer to Float32Array for preview
+      const channelData = processedBuffer.getChannelData(0);
+      const blob = new Blob([channelData.buffer], { type: 'audio/wav' });
       const tempId = `preview-${Date.now()}`;
       await audioEngine.loadSample(tempId, await blob.arrayBuffer());
       await audioEngine.playSample(tempId);
