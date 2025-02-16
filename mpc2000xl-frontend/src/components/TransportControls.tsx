@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface TransportControlsProps {
+export interface TransportControlsProps {
   onPlay: () => void;
   onStop: () => void;
   onRecord: () => void;
