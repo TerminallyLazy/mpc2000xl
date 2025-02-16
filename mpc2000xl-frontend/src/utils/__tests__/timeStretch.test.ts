@@ -73,7 +73,7 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(testBuffer, options);
-    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result instanceof AudioBuffer).toBe(true);
     expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
   });
 
@@ -85,7 +85,7 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(testBuffer, options);
-    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result instanceof AudioBuffer).toBe(true);
     expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
   });
 
@@ -97,7 +97,7 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(testBuffer, options);
-    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result instanceof AudioBuffer).toBe(true);
     expect(result.length).toBe(Math.floor(testBuffer.length * (100 / options.ratio)));
   });
 });
@@ -158,7 +158,7 @@ describe('TimeStretchProcessor', () => {
     };
 
     const result = await processor.processAudio(buffer, options);
-    expect(result).toBeInstanceOf(AudioBuffer);
+    expect(result instanceof AudioBuffer).toBe(true);
     expect(result.length).toBe(Math.floor(buffer.length * (100 / options.ratio)));
   });
 });

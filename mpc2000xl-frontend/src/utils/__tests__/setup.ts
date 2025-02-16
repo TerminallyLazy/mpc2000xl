@@ -6,23 +6,39 @@ class AudioBuffer {
   sampleRate: number;
   numberOfChannels: number;
   duration: number;
+  private channels: Float32Array[];
 
   constructor(options?: { length?: number; numberOfChannels?: number; sampleRate?: number }) {
     this.numberOfChannels = options?.numberOfChannels || 1;
     this.length = options?.length || 44100;
     this.sampleRate = options?.sampleRate || 44100;
     this.duration = this.length / this.sampleRate;
+    this.channels = Array.from({ length: this.numberOfChannels }, () => new Float32Array(this.length));
   }
 
-  getChannelData(_channel: number): Float32Array {
-    return new Float32Array(this.length);
+  getChannelData(channel: number): Float32Array {
+    if (channel < 0 || channel >= this.numberOfChannels) {
+      throw new Error('Invalid channel index');
+    }
+    return this.channels[channel];
   }
-}
 
-// Then define MockAudioBuffer that extends it
-class MockAudioBuffer extends AudioBuffer {
-  constructor(numberOfChannels = 1, length = 44100, sampleRate = 44100) {
-    super({ numberOfChannels, length, sampleRate });
+  copyToChannel(source: Float32Array, channelNumber: number, startInChannel = 0): void {
+    if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
+      throw new Error('Invalid channel index');
+    }
+    const channel = this.channels[channelNumber];
+    const length = Math.min(source.length, channel.length - startInChannel);
+    channel.set(source.subarray(0, length), startInChannel);
+  }
+
+  copyFromChannel(destination: Float32Array, channelNumber: number, startInChannel = 0): void {
+    if (channelNumber < 0 || channelNumber >= this.numberOfChannels) {
+      throw new Error('Invalid channel index');
+    }
+    const channel = this.channels[channelNumber];
+    const length = Math.min(destination.length, channel.length - startInChannel);
+    destination.set(channel.subarray(startInChannel, startInChannel + length));
   }
 }
 
